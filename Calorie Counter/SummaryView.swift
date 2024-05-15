@@ -21,7 +21,6 @@ struct SummaryView: View {
                             .font(.largeTitle)
                             .fontWeight(.bold)
                     }
-                    .padding(.horizontal)
 
                     // Favorites Section
                     VStack(alignment: .leading, spacing: 15) {
@@ -37,10 +36,8 @@ struct SummaryView: View {
                                     .foregroundColor(.blue)
                             }
                         }
-                        .padding(.horizontal)
                         
-                        // Calories Card
-                        SummaryCardView(
+                        LargeCardView(
                             title: "Calories",
                             value: "1,394",
                             unit: "cal",
@@ -49,126 +46,67 @@ struct SummaryView: View {
                             color: .red,
                             time: "9:10 AM"
                         )
+                        .previewLayout(.sizeThatFits)
                         
-                        // Weight Card
-                        SummaryCardView(
+                        LargeCardView(
                             title: "Weight",
                             value: "213",
                             unit: "lbs",
-                            remaining: nil,
-                            percentage: 62,
-                            color: .blue,
+                            percentage: 60,
+                            color: .indigo,
                             time: "7:15 AM"
                         )
                         
-                        // Macros Card
-                        VStack(spacing: 15) {
-                            Text("Macros")
+                        MacrosView(
+                            time: "9:15 AM",
+                            proteinConsumed: 113,
+                            proteinGoal: 150,
+                            carbohydratesConsumed: 92,
+                            carbohydratesGoal: 123,
+                            fatsConsumed: 43
+                        )
+                    }
+                    
+                    // Meals Section
+                    VStack(alignment: .leading, spacing: 15) {
+                        HStack {
+                            Text("Meals")
                                 .font(.title2)
                                 .fontWeight(.semibold)
-                                .padding(.horizontal)
-                            SummaryCardView(
-                                title: "Protein",
-                                value: "113",
-                                unit: "g",
-                                remaining: "80g remaining",
-                                percentage: 80,
-                                color: .green,
-                                time: "9:10 AM"
-                            )
-                            SummaryCardView(
-                                title: "Carbohydrates",
-                                value: "92",
-                                unit: "g",
-                                remaining: "31g remaining",
-                                percentage: 75,
-                                color: .blue,
-                                time: nil
-                            )
-                            SummaryCardView(
-                                title: "Fats",
-                                value: "43",
-                                unit: "g",
-                                remaining: "22g remaining",
-                                percentage: 51,
-                                color: .orange,
-                                time: nil
-                            )
+                            Spacer()
+                            Button(action: {
+                                // Edit action
+                            }) {
+                                Text("Show more")
+                                    .foregroundColor(.blue)
+                            }
                         }
-                        .padding(.horizontal)
+                        
+                        MealCardView(
+                            label: "Breakfast at McDonalds",
+                            calories: 830,
+                            protein: 17,
+                            carbohydrates: 24,
+                            fats: 13,
+                            time: "9:10 AM"
+                        )
+                        
                     }
                 }
-                .padding(.vertical)
+                .padding(.horizontal)
+                .padding(.top, 70)
+                .padding(.bottom, 110)
             }
             .navigationBarHidden(true)
+            .background(Color(UIColor.systemGray6))
+            .edgesIgnoringSafeArea(.all)
+
         }
     }
 }
 
-struct SummaryCardView: View {
-    var title: String
-    var value: String
-    var unit: String
-    var remaining: String?
-    var percentage: Int
-    var color: Color
-    var time: String?
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Text(title)
-                    .font(.headline)
-                    .foregroundColor(color)
-                Spacer()
-                if let time = time {
-                    Text(time)
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                }
-            }
-            HStack(alignment: .bottom) {
-                Text(value)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                Text(unit)
-                    .font(.title3)
-                    .foregroundColor(.gray)
-            }
-            if let remaining = remaining {
-                Text(remaining)
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-            ProgressBar(percentage: percentage, color: color)
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 5)
-    }
-}
-
-struct ProgressBar: View {
-    var percentage: Int
-    var color: Color
-    
-    var body: some View {
-        ZStack(alignment: .leading) {
-            Rectangle()
-                .frame(height: 10)
-                .opacity(0.3)
-                .foregroundColor(color)
-            Rectangle()
-                .frame(width: CGFloat(percentage) * 2, height: 10)
-                .foregroundColor(color)
-        }
-        .cornerRadius(5)
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
+struct SummaryView_Preview: PreviewProvider {
     static var previews: some View {
-        SummaryView()
+        MainView()
     }
 }
