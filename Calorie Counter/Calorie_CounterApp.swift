@@ -25,7 +25,7 @@ struct Calorie_CounterApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SummaryView()
         }
         .modelContainer(sharedModelContainer)
     }
