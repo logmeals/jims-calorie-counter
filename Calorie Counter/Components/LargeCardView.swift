@@ -9,10 +9,10 @@ import SwiftUI
 
 struct LargeCardView: View {
     var title: String
-    var value: String
+    var value: Int?
     var unit: String
-    var remaining: String?
-    var percentage: Int
+    var remaining: Int?
+    var percentage: Int?
     var color: Color
     var time: String?
     
@@ -35,17 +35,17 @@ struct LargeCardView: View {
             }
             HStack {
                 HStack(alignment: .bottom, spacing: 10) {
-                    Text(value)
+                    Text(value != nil ? formatNumberWithCommas(value ?? 0).description : "N/A")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                    Text(unit)
+                    Text(unit.prefix(3))
                         .font(.title3)
                         .foregroundColor(.gray)
                 }
                 Spacer()
                 HStack {
                     if let remaining = remaining {
-                        Text(remaining)
+                        Text("\(remaining.description) \(unit) remaining")
                             .font(.caption)
                             .foregroundColor(.gray)
                             .lineLimit(2)
@@ -54,8 +54,18 @@ struct LargeCardView: View {
                             .padding(.trailing, 5)
                         // Adjust max width to prevent overflow
                     }
-                    CircularProgressView(percentage: 40.0, color: color)
-                        .frame(width: 40, height: 40) // Adjust the size of the circular progress
+                    if let percentage = percentage {
+                        CircularProgressView(percentage: Double(percentage), color: color)
+                            .frame(width: 40, height: 40) // Adjust the size of the circular progress
+                    } else {
+                        Button(action: {
+                                            // Button action
+                        }) {
+                            Text("Add goal")
+                                .font(.caption)
+                                .foregroundColor(color)
+                        }.padding(.top, 30)
+                    }
                 }
             }
         }
@@ -66,18 +76,28 @@ struct LargeCardView: View {
     }
 }
 
-struct CaloriesCardView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview("With goal") {
         LargeCardView(
             title: "Calories",
-            value: "1,394",
-            unit: "cal",
-            remaining: "300 calories remaining",
+            value: 1394,
+            unit: "calories",
+            remaining: 300,
             percentage: 80,
             color: .red,
             time: "9:10 AM"
         )
         .previewLayout(.sizeThatFits)
         .padding()
-    }
+}
+
+#Preview("Without goal") {
+        LargeCardView(
+            title: "Calories",
+            value: 1394,
+            unit: "calories",
+            color: .red,
+            time: "9:10 AM"
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
 }

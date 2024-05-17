@@ -8,20 +8,25 @@
 import SwiftUI
 
 struct WelcomeView: View {
+    @Binding var showWelcomeScreen: Bool
+
     var body: some View {
         VStack {
             Spacer()
             
-            Image("AppIcon")
-                .frame(width: 100, height: 100)
-                .padding(.bottom, 40)
+            Image("Logo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 185, height: 185)
+                .clipShape(RoundedRectangle(cornerRadius:10))
+                .shadow(color: Color(UIColor.systemGray2), radius: 15)
             
             Text("Welcome to Jim's Calorie Counter")
                 .font(.title)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
-                .padding(.bottom, 20)
+                .padding(.vertical, 20)
             
             Text("Inspired by my personal weight loss journey, this app helps you track your nutrition quickly and securely, on-device.\n\nYou can add meals by taking a photo, describing them, or scanning their barcode. See diet summaries for any given day. Set nutrition goals, and track your weight.")
                 .font(.body)
@@ -30,7 +35,9 @@ struct WelcomeView: View {
                 .padding(.bottom, 40)
             
             Button(action: {
-                UserDefaults.standard.set(true, forKey: "hasSeenWelcomeScreen")
+                // Set the flag to true and dismiss the welcome screen
+                UserDefaults.standard.set(true, forKey: "hasShownWelcomeScreen")
+                showWelcomeScreen = false
             }) {
                 Text("Continue")
                     .font(.headline)
@@ -50,6 +57,6 @@ struct WelcomeView: View {
 
 struct WelcomeView_Preview: PreviewProvider {
     static var previews: some View {
-        WelcomeView()
+        WelcomeView(showWelcomeScreen: .constant(true))
     }
 }

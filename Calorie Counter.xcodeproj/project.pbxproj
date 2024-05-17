@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3853E41F2BF80FEE00958AB4 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E41E2BF80FEE00958AB4 /* Logic.swift */; };
+		3853E4212BF8129900958AB4 /* MealProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E4202BF8129900958AB4 /* MealProcessingView.swift */; };
 		38C2ED562BF4680E00B2C7C8 /* Calorie_CounterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED552BF4680E00B2C7C8 /* Calorie_CounterApp.swift */; };
 		38C2ED5C2BF4681000B2C7C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38C2ED5B2BF4681000B2C7C8 /* Assets.xcassets */; };
 		38C2ED5F2BF4681000B2C7C8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38C2ED5E2BF4681000B2C7C8 /* Preview Assets.xcassets */; };
@@ -14,13 +16,15 @@
 		38C2ED682BF46C3E00B2C7C8 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED672BF46C3E00B2C7C8 /* SummaryView.swift */; };
 		38C2ED6C2BF4771600B2C7C8 /* LargeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED6B2BF4771600B2C7C8 /* LargeCardView.swift */; };
 		38C2ED6E2BF47EDB00B2C7C8 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED6D2BF47EDB00B2C7C8 /* CircularProgressView.swift */; };
-		38C2ED702BF4804800B2C7C8 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED6F2BF4804800B2C7C8 /* MainView.swift */; };
+		38C2ED702BF4804800B2C7C8 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED6F2BF4804800B2C7C8 /* MainTabView.swift */; };
 		38C2ED722BF4815500B2C7C8 /* MacrosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED712BF4815500B2C7C8 /* MacrosView.swift */; };
 		38C2ED742BF494D900B2C7C8 /* MealCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED732BF494D900B2C7C8 /* MealCardView.swift */; };
 		38C2ED762BF4972E00B2C7C8 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED752BF4972E00B2C7C8 /* WelcomeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3853E41E2BF80FEE00958AB4 /* Logic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
+		3853E4202BF8129900958AB4 /* MealProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealProcessingView.swift; sourceTree = "<group>"; };
 		38C2ED522BF4680E00B2C7C8 /* Calorie Counter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Calorie Counter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		38C2ED552BF4680E00B2C7C8 /* Calorie_CounterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calorie_CounterApp.swift; sourceTree = "<group>"; };
 		38C2ED5B2BF4681000B2C7C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -29,10 +33,11 @@
 		38C2ED672BF46C3E00B2C7C8 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 		38C2ED6B2BF4771600B2C7C8 /* LargeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeCardView.swift; sourceTree = "<group>"; };
 		38C2ED6D2BF47EDB00B2C7C8 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
-		38C2ED6F2BF4804800B2C7C8 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		38C2ED6F2BF4804800B2C7C8 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		38C2ED712BF4815500B2C7C8 /* MacrosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacrosView.swift; sourceTree = "<group>"; };
 		38C2ED732BF494D900B2C7C8 /* MealCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCardView.swift; sourceTree = "<group>"; };
 		38C2ED752BF4972E00B2C7C8 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		38C2ED772BF6F35500B2C7C8 /* Calorie Counter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Calorie Counter.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,17 +70,13 @@
 		38C2ED542BF4680E00B2C7C8 /* Calorie Counter */ = {
 			isa = PBXGroup;
 			children = (
-				38C2ED752BF4972E00B2C7C8 /* WelcomeView.swift */,
-				38C2ED712BF4815500B2C7C8 /* MacrosView.swift */,
-				38C2ED6F2BF4804800B2C7C8 /* MainView.swift */,
-				38C2ED6B2BF4771600B2C7C8 /* LargeCardView.swift */,
+				38C2ED7C2BF7AEBA00B2C7C8 /* Screens */,
+				38C2ED7B2BF7AEAA00B2C7C8 /* Components */,
+				38C2ED7A2BF7AE9300B2C7C8 /* Model */,
+				38C2ED772BF6F35500B2C7C8 /* Calorie Counter.entitlements */,
 				38C2ED552BF4680E00B2C7C8 /* Calorie_CounterApp.swift */,
-				38C2ED672BF46C3E00B2C7C8 /* SummaryView.swift */,
 				38C2ED5B2BF4681000B2C7C8 /* Assets.xcassets */,
 				38C2ED5D2BF4681000B2C7C8 /* Preview Content */,
-				38C2ED652BF4685200B2C7C8 /* Meal.swift */,
-				38C2ED6D2BF47EDB00B2C7C8 /* CircularProgressView.swift */,
-				38C2ED732BF494D900B2C7C8 /* MealCardView.swift */,
 			);
 			path = "Calorie Counter";
 			sourceTree = "<group>";
@@ -86,6 +87,37 @@
 				38C2ED5E2BF4681000B2C7C8 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		38C2ED7A2BF7AE9300B2C7C8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				38C2ED652BF4685200B2C7C8 /* Meal.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		38C2ED7B2BF7AEAA00B2C7C8 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				38C2ED732BF494D900B2C7C8 /* MealCardView.swift */,
+				38C2ED6D2BF47EDB00B2C7C8 /* CircularProgressView.swift */,
+				38C2ED712BF4815500B2C7C8 /* MacrosView.swift */,
+				38C2ED6B2BF4771600B2C7C8 /* LargeCardView.swift */,
+				3853E41E2BF80FEE00958AB4 /* Logic.swift */,
+				3853E4202BF8129900958AB4 /* MealProcessingView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		38C2ED7C2BF7AEBA00B2C7C8 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				38C2ED6F2BF4804800B2C7C8 /* MainTabView.swift */,
+				38C2ED752BF4972E00B2C7C8 /* WelcomeView.swift */,
+				38C2ED672BF46C3E00B2C7C8 /* SummaryView.swift */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,8 +193,10 @@
 				38C2ED722BF4815500B2C7C8 /* MacrosView.swift in Sources */,
 				38C2ED742BF494D900B2C7C8 /* MealCardView.swift in Sources */,
 				38C2ED662BF4685200B2C7C8 /* Meal.swift in Sources */,
-				38C2ED702BF4804800B2C7C8 /* MainView.swift in Sources */,
+				3853E41F2BF80FEE00958AB4 /* Logic.swift in Sources */,
+				38C2ED702BF4804800B2C7C8 /* MainTabView.swift in Sources */,
 				38C2ED762BF4972E00B2C7C8 /* WelcomeView.swift in Sources */,
+				3853E4212BF8129900958AB4 /* MealProcessingView.swift in Sources */,
 				38C2ED682BF46C3E00B2C7C8 /* SummaryView.swift in Sources */,
 				38C2ED6C2BF4771600B2C7C8 /* LargeCardView.swift in Sources */,
 				38C2ED6E2BF47EDB00B2C7C8 /* CircularProgressView.swift in Sources */,
@@ -297,23 +331,26 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Calorie Counter/Calorie Counter.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Calorie Counter/Preview Content\"";
 				DEVELOPMENT_TEAM = 534DZJT62R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Jim's Calorie Counter";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "cx.jims.Calorie-Counter";
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "cx.jims.calorie-counter";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -330,23 +367,26 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Calorie Counter/Calorie Counter.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Calorie Counter/Preview Content\"";
 				DEVELOPMENT_TEAM = 534DZJT62R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Jim's Calorie Counter";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "cx.jims.Calorie-Counter";
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "cx.jims.calorie-counter";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

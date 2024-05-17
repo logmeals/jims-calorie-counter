@@ -7,8 +7,15 @@
 
 import SwiftUI
 
-struct MainView: View {
-    @State private var showingWelcomeView = true
+struct MainTabView: View {
+    @State private var showWelcomeScreen: Bool
+
+    init() {
+         // Check if the welcome screen has been shown before
+         let hasShownWelcomeScreen = UserDefaults.standard.bool(forKey: "hasShownWelcomeScreen")
+         _showWelcomeScreen = State(initialValue: !hasShownWelcomeScreen)
+     }
+    
 
     var body: some View {
         TabView {
@@ -30,9 +37,10 @@ struct MainView: View {
                     Text("Settings")
                 }
         }
-        .sheet(isPresented: $showingWelcomeView) {
-            WelcomeView()
+        .sheet(isPresented: $showWelcomeScreen) {
+            WelcomeView(showWelcomeScreen: $showWelcomeScreen)
         }
+        .modelContainer(for: Meal.self)
     }
 }
 
@@ -55,9 +63,8 @@ struct SettingsView: View {
     }
 }
 
-struct MainView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
-    }
+#Preview {
+    return MainTabView()
+        .modelContainer(for: Meal.self, inMemory: true)
 }
 

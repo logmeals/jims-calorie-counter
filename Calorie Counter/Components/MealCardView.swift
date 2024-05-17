@@ -13,7 +13,7 @@ struct MealCardView: View {
     var protein: Int
     var carbohydrates: Int
     var fats: Int
-    var time: String
+    var createdAt: Date
     
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -22,7 +22,7 @@ struct MealCardView: View {
                     .fill(Color.green.opacity(0.2))
                     .frame(width: 40, height: 40)
                 Circle()
-                    .stroke(Color.green, lineWidth: 2)
+                    .stroke(Color.green.opacity(0.5), lineWidth: 2)
                     .frame(width: 40, height: 40)
                 Text("🍔")
                     .font(.system(size: 16))
@@ -34,7 +34,7 @@ struct MealCardView: View {
                     Text(label)
                         .font(.headline)
                     Spacer()
-                    Text(time)
+                    Text(formatTimestamp(date: createdAt))
                         .font(.caption)
                         .foregroundColor(.gray)
                 }
@@ -61,7 +61,7 @@ struct MealCardView_Preview: PreviewProvider {
             protein: 17,
             carbohydrates: 24,
             fats: 13,
-            time: "9:10 AM"
+            createdAt: Date()
         )
         .previewLayout(.sizeThatFits)
         .padding()

@@ -108,12 +108,26 @@ struct MacrosView: View {
     }
 }
 
-struct MacrosView_Preview: PreviewProvider {
-    static var previews: some View {
+#Preview("Mixed") {
         MacrosView(time: "9:15 AM",
                    proteinConsumed: 113, proteinGoal: 150,
                    carbohydratesConsumed: 92, carbohydratesGoal: 123,
                    fatsConsumed: 43)
             .padding()
-    }
+}
+
+#Preview("With goals") {
+        MacrosView(time: "9:15 AM",
+                   proteinConsumed: 113, proteinGoal: 150,
+                   carbohydratesConsumed: 92, carbohydratesGoal: 123,
+                   fatsConsumed: 43, fatsGoal: 100)
+            .padding()
+}
+
+#Preview("Without goals") {
+        MacrosView(time: "9:15 AM",
+                   proteinConsumed: 113,
+                   carbohydratesConsumed: 92,
+                   fatsConsumed: 43)
+            .padding()
 }
