@@ -9,14 +9,21 @@ import Foundation
 import SwiftData
 
 @Model
-final class Meal {
+final class Meal: Identifiable {
+    var id: UUID
+    var emoji: String
     var createdAt: Date
-    var consumedAt: Date
-    var label: String
+    var reviewedAt: Date?
+    var label: String?
+    var details: String?
+    var calories: Int?
+    var protein: Int?
+    var carbohydrates: Int?
+    var fats: Int?
     
-    init(timestamp: Date) {
-        self.createdAt = timestamp
-        self.consumedAt = timestamp
-        self.label = ""
+    init(id: UUID = UUID(), createdAt: Date = Date()) {
+        self.id = id
+        self.emoji = "⏳"
+        self.createdAt = createdAt
     }
 }

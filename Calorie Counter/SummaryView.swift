@@ -8,15 +8,21 @@
 import SwiftUI
 
 struct SummaryView: View {
+    @State private var displayDate: String = ""
+    
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     // Date and Summary Title
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("Monday, June 12")
+                        Text(displayDate)
                             .font(.subheadline)
                             .foregroundColor(.gray)
+                            .onAppear {
+                                let date = Date()
+                                displayDate = formatDate(date)
+                            }
                         Text("Summary")
                             .font(.largeTitle)
                             .fontWeight(.bold)
@@ -103,6 +109,32 @@ struct SummaryView: View {
 
         }
     }
+    
+    func formatDate(_ date: Date) -> String {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)
+        
+        if calendar.isDate(date, inSameDayAs: today) {
+            return "Today"
+        } else if let yesterday = yesterday, calendar.isDate(date, inSameDayAs: yesterday) {
+            return "Yesterday"
+        } else {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEEE, MMMM d"
+            
+            var formattedDate = dateFormatter.string(from: date)
+            let currentYear = calendar.component(.year, from: today)
+            let dateYear = calendar.component(.year, from: date)
+            
+            if dateYear != currentYear {
+                formattedDate += ", \(dateYear)"
+            }
+            
+            return formattedDate
+        }
+    }
+    
 }
 
 struct SummaryView_Preview: PreviewProvider {

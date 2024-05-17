@@ -12,9 +12,7 @@ struct WelcomeView: View {
         VStack {
             Spacer()
             
-            Image(systemName: "applelogo")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            Image("AppIcon")
                 .frame(width: 100, height: 100)
                 .padding(.bottom, 40)
             
