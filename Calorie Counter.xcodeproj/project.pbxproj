@@ -31,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		3801EAB02BF9188100C204C2 /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
+		3801EAB62BF946F600C204C2 /* Calorie-Counter-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Calorie-Counter-Info.plist"; sourceTree = SOURCE_ROOT; };
 		3853E41E2BF80FEE00958AB4 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		3853E4202BF8129900958AB4 /* MealProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealProcessingView.swift; sourceTree = "<group>"; };
 		3853E4222BF8463B00958AB4 /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
@@ -84,6 +85,7 @@
 		38C2ED542BF4680E00B2C7C8 /* Calorie Counter */ = {
 			isa = PBXGroup;
 			children = (
+				3801EAB62BF946F600C204C2 /* Calorie-Counter-Info.plist */,
 				38C2ED7C2BF7AEBA00B2C7C8 /* Screens */,
 				38C2ED7B2BF7AEAA00B2C7C8 /* Components */,
 				38C2ED7A2BF7AE9300B2C7C8 /* Model */,
@@ -366,8 +368,11 @@
 				DEVELOPMENT_TEAM = 534DZJT62R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Jim's Calorie Counter";
+				INFOPLIST_FILE = "Calorie-Counter-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Calorie Counter";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "We use Apple Health to read and add nutrition data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We use Apple Health to read and add nutrition data.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -402,8 +407,11 @@
 				DEVELOPMENT_TEAM = 534DZJT62R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Jim's Calorie Counter";
+				INFOPLIST_FILE = "Calorie-Counter-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Calorie Counter";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "We use Apple Health to read and add nutrition data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We use Apple Health to read and add nutrition data.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

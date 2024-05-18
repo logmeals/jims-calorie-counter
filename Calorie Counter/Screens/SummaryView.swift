@@ -62,13 +62,15 @@ struct SummaryView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     // Date and Summary Title
                     VStack(alignment: .leading, spacing: 5) {
-                        Text(displayDate)
+                        /*
+                         Text(displayDate)
                             .font(.subheadline)
                             .foregroundColor(.gray)
                             .onAppear {
                                 let date = Date()
                                 displayDate = formatDate(date)
                             }
+                         */
                         Text("Summary")
                             .font(.largeTitle)
                             .fontWeight(.bold)
@@ -81,12 +83,12 @@ struct SummaryView: View {
                                 .font(.title2)
                                 .fontWeight(.semibold)
                             Spacer()
-                            Button(action: {
+                            /*Button(action: {
                                 // Edit action
                             }) {
                                 Text("Edit")
                                     .foregroundColor(.blue)
-                            }
+                            }*/
                         }
                         
                         LargeCardView(
@@ -99,6 +101,7 @@ struct SummaryView: View {
                         )
                         .previewLayout(.sizeThatFits)
                         
+                        /*
                         LargeCardView(
                             title: "Weight",
                             value: nil,
@@ -106,7 +109,7 @@ struct SummaryView: View {
                             color: .indigo,
                             createdAt: latestTimestamp().weight,
                             goal: weightGoal != 0 ? weightGoal : nil
-                        )
+                        )*/
                         
                         MacrosView(
                             createdAt: latestTimestamp().meal,
@@ -130,8 +133,10 @@ struct SummaryView: View {
                                 Button(action: {
                                     // Edit action
                                 }) {
-                                    Text("Show more")
-                                        .foregroundColor(.blue)
+                                    /*
+                                     Text("Show more")
+                                     .foregroundColor(.blue)
+                                    */
                                 }
                             }
                         }
@@ -152,7 +157,7 @@ struct SummaryView: View {
                                 )
                         }
                         if meals.isEmpty {
-                            Text("You haven't added any meals yet today.")
+                            Text("You haven't added any meals yet.")
                                 .font(.title3)
                                 .foregroundColor(.gray)
                                 .multilineTextAlignment(.center)

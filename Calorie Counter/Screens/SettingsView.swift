@@ -10,19 +10,54 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct SettingsView: View {
-    @State private var caloriesGoal: String = "2,000 calories / day"
-    @State private var proteinGoal: String = "23g / day"
-    @State private var weightGoal: String = "192 lbs"
     @State private var askForDescription: Bool = true
     @State private var mealsToShow: String = "3"
     @State private var mealReminders: Bool = false
     @State private var sendAnonymousData: Bool = true
+    
+    @State private var newGoal: String = ""
+    @State private var calorieGoal: Int
+    // @State private var weightGoal: Int
+    @State private var proteinGoal: Int
+    @State private var carbohydratesGoal: Int
+    @State private var fatsGoal: Int
+    
+    @State private var editingGoal: String = ""
+    // Computed property to check if editingGoal is not empty
+    private var isEditing: Bool {
+        return !editingGoal.isEmpty
+    }
+    
+    init() {
+        // Fetch calorie goal
+        let calorieGoal = UserDefaults.standard.integer(forKey: "caloriesGoal")
+        _calorieGoal = State(initialValue: calorieGoal)
+        // Fetch weight goal
+        /*
+        let weightGoal = UserDefaults.standard.integer(forKey: "weightGoal")
+        _weightGoal = State(initialValue: weightGoal)
+        */
+        // Fetch protein goal
+        let proteinGoal = UserDefaults.standard.integer(forKey: "proteinGoal")
+        _proteinGoal = State(initialValue: proteinGoal)
+        // Fetch weight goal
+        let carbohydratesGoal = UserDefaults.standard.integer(forKey: "carbohydratesGoal")
+        _carbohydratesGoal = State(initialValue: carbohydratesGoal)
+        // Fetch weight goal
+        let fatsGoal = UserDefaults.standard.integer(forKey: "fatsGoal")
+        _fatsGoal = State(initialValue: fatsGoal)
+    }
+    
+    func editGoal(goal: String) {
+        editingGoal = goal
+        print("Editing \(goal) goal")
+    }
 
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-                    
+                    /*
                     settingsSection(header: "Favorites") {
                         settingsRow(title: "Calories", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil, onTap: nil)
                             /*.onDrag {
@@ -36,15 +71,17 @@ struct SettingsView: View {
                             }*/
                         settingsRow(title: "Macros", value: nil, imageName: "Bars", lastRow: true, gray: true, danger: nil, onTap: nil)
                     }
-                    
+                    */
+                     
                     settingsSection(header: "Goals") {
-                        settingsRow(title: "Calories", value: caloriesGoal, lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        settingsRow(title: "Protein", value: proteinGoal, lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        settingsRow(title: "Carbohydrates", value: proteinGoal, lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        settingsRow(title: "Fats", value: proteinGoal, lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        settingsRow(title: "Weight", value: weightGoal, lastRow: true, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Calories", value: calorieGoal > 0 ? "\(calorieGoal) calories" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal)
+                        settingsRow(title: "Protein", value: proteinGoal > 0 ? "\(proteinGoal)g" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal)
+                        settingsRow(title: "Carbohydrates", value: carbohydratesGoal > 0 ? "\(carbohydratesGoal)g" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal)
+                        settingsRow(title: "Fats", value: fatsGoal > 0 ? "\(fatsGoal)g" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal)
+                        //settingsRow(title: "Weight", value: "\(weightGoal)g/day", lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
                     
+                    /*
                     settingsSection(header: "Preferences") {
                         settingsRow(title: "Ask for description on meal photos?", value: askForDescription ? "Yes" : "No", lastRow: nil, gray: nil, danger: nil, onTap: nil)
                         settingsRow(title: "Meals to show by default?", value: mealsToShow, lastRow: nil, gray: nil, danger: nil, onTap: nil)
@@ -56,7 +93,9 @@ struct SettingsView: View {
                         settingsRow(title: "Join our Discord Community", imageName: "Discord", lastRow: nil, gray: nil, danger: nil, onTap: nil)
                         settingsRow(title: "Refer a friend, get $5!", imageName: "Gift", lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
+                     */
                     
+                    /*
                     settingsSection(header: "Support") {
                         settingsRow(title: "Restore purchases", imageName: "Bag", lastRow: nil, gray: nil, danger: nil, onTap: nil)
                         settingsRow(title: "Upgrade and unlock full access", imageName: "Lightning", lastRow: nil, gray: nil, danger: nil, onTap: nil)
@@ -66,8 +105,45 @@ struct SettingsView: View {
                         settingsRow(title: "View Privacy Policy / EULA", imageName: "Building", lastRow: nil, gray: nil, danger: nil, onTap: nil)
                         settingsRow(title: "Delete all data", imageName: "Garbage", lastRow: true, gray: nil, danger: true, onTap: nil)
                     }
+                     */
                 }
                 .padding()
+            }
+            .alert("Edit \(editingGoal) goal", isPresented: Binding<Bool>(
+                get: { self.isEditing },
+                set: { newValue in
+                    if !newValue {
+                        self.editingGoal = ""
+                    }
+                })) {
+                TextField("ex: 92g", text: $newGoal)
+                Button("Save goal", action: {
+                    let desiredGoal = Int($newGoal.wrappedValue)
+                    if desiredGoal != 0 {
+                        // Save new goal
+                        UserDefaults.standard.set(desiredGoal, forKey: "\(editingGoal.lowercased())Goal")
+                        // Update goal in macro item view immediately without refreshing view
+                        if(editingGoal.lowercased() == "calories") { calorieGoal = desiredGoal ?? 0 }
+                        if(editingGoal.lowercased() == "protein") { proteinGoal = desiredGoal ?? 0 }
+                        if(editingGoal.lowercased() == "carbohydrates") { carbohydratesGoal = desiredGoal ?? 0 }
+                        if(editingGoal.lowercased() == "fats") {fatsGoal = desiredGoal ?? 0 }
+                    }
+                })
+                    Button("Delete goal", action: {
+                        // Update User Defaults
+                        UserDefaults.standard.set(nil, forKey: "\(editingGoal.lowercased())Goal")
+                        // Update goal in macro item view immediately without refreshing view
+                        if(editingGoal.lowercased() == "calories") { calorieGoal = 0 }
+                        if(editingGoal.lowercased() == "protein") { proteinGoal = 0 }
+                        if(editingGoal.lowercased() == "carbohydrates") { carbohydratesGoal = 0 }
+                        if(editingGoal.lowercased() == "fats") {fatsGoal = 0 }
+                        editingGoal = ""
+                    })
+                    Button("Cancel", action: {
+                        editingGoal = ""
+                    })
+            } message: {
+                Text("Enter your new goal:")
             }
             .background(Color(UIColor.systemGray6))
             .navigationTitle("Settings")
