@@ -86,8 +86,6 @@ struct LargeCardView: View {
                                     if desiredGoal != 0 {
                                         // Save new goal
                                         UserDefaults.standard.set(desiredGoal, forKey: "\(title.lowercased())Goal")
-                                        print("Setting UserDefaults \(title.lowercased())Goal")
-                                        print((desiredGoal ?? 0).description)
                                         // Update goal in macro item view immediately without refreshing view
                                         goalState = desiredGoal
                                     }

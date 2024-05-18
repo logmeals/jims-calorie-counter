@@ -25,7 +25,6 @@ struct SummaryView: View {
         // Fetch calorie goal
         let calorieGoal = UserDefaults.standard.integer(forKey: "caloriesGoal")
         _calorieGoal = State(initialValue: calorieGoal)
-        print("Setting calorie goal locally: \(calorieGoal)")
         // Fetch weight goal
         let weightGoal = UserDefaults.standard.integer(forKey: "weightGoal")
         _weightGoal = State(initialValue: weightGoal)

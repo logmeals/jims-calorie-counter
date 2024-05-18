@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @State private var caloriesGoal: String = "2,000 calories / day"
@@ -21,11 +22,20 @@ struct SettingsView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
+                    
                     settingsSection(header: "Favorites") {
-                        settingsRow(title: "Calories", imageName: "Bars", lastRow: nil, gray: true, danger: nil)
-                        settingsRow(title: "Weight", imageName: "Bars", lastRow: nil, gray: true, danger: nil)
-                        settingsRow(title: "Macros", imageName: "Bars", lastRow: nil, gray: true, danger: nil)
-                        settingsRow(title: "Meals", imageName: "Bars", lastRow: true, gray: true, danger: nil)
+                        settingsRow(title: "Calories", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil)
+                            /*.onDrag {
+                                print("Dragging item: Calories")
+                                return NSItemProvider()
+                            }*/
+                        settingsRow(title: "Weight", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil)
+                            /*.onDrag {
+                                print("Dragging item: Weight")
+                                return NSItemProvider()
+                            }*/
+                        settingsRow(title: "Macros", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil)
+                        settingsRow(title: "Meals", value: nil, imageName: "Bars", lastRow: true, gray: true, danger: nil)
                     }
                     
                     settingsSection(header: "Goals") {
