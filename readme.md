@@ -10,4 +10,4 @@ An open-source calorie counter app for iPhones.
 - Count unlimited calories without a pesky monthly subscription
 
 ## Need help?
-Contact Jim Bisenius at [jim@carrie.so](mailto:jim@carrie.so).
+Contact Jim Bisenius at [support@jims.cx](mailto:support@jims.cx).
