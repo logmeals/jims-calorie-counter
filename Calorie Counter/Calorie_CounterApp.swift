@@ -13,8 +13,8 @@ struct Calorie_CounterApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            MainTabView(selection: nil)
         }
-            .modelContainer(for: Meal.self)
+        .modelContainer(for: [Weight.self, Meal.self])
     }
 }

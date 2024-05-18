@@ -11,10 +11,22 @@ struct LargeCardView: View {
     var title: String
     var value: Int?
     var unit: String
-    var remaining: Int?
-    var percentage: Int?
     var color: Color
-    var time: String?
+    var createdAt: Date?
+    var goal: Int?
+    @State private var showingAlert = false
+    @State private var newGoal = ""
+    @State private var goalState: Int?
+    
+    init(title: String, value: Int?, unit: String, color: Color, createdAt: Date?, goal: Int?) {
+        self.title = title
+        self.value = value
+        self.unit = unit
+        self.color = color
+        self.createdAt = createdAt
+        self.goal = goal
+        _goalState = State.init(initialValue: goal)
+    }
     
     var body: some View {
         VStack {
@@ -24,8 +36,8 @@ struct LargeCardView: View {
                         .font(.headline)
                         .foregroundColor(color)
                     Spacer()
-                    if let time = time {
-                        Text(time)
+                    if let createdAt = createdAt {
+                        Text(formatTimestamp(date: createdAt))
                             .font(.caption)
                             .foregroundColor(.gray)
                             .frame(maxWidth: 150, alignment: .trailing)
@@ -44,8 +56,8 @@ struct LargeCardView: View {
                 }
                 Spacer()
                 HStack {
-                    if let remaining = remaining {
-                        Text("\(remaining.description) \(unit) remaining")
+                    if let goalState = goalState {
+                        Text("\(goalState - (value ?? 0)) \(unit) remaining")
                             .font(.caption)
                             .foregroundColor(.gray)
                             .lineLimit(2)
@@ -54,17 +66,35 @@ struct LargeCardView: View {
                             .padding(.trailing, 5)
                         // Adjust max width to prevent overflow
                     }
-                    if let percentage = percentage {
-                        CircularProgressView(percentage: Double(percentage), color: color)
+                    if let goalState = goalState {
+                        CircularProgressView(percentage: Double((goalState != 0) ? Double(value ?? 0) / Double(goalState) * 100 : 0), color: color)
                             .frame(width: 40, height: 40) // Adjust the size of the circular progress
                     } else {
                         Button(action: {
-                                            // Button action
+                            // Button action
+                            showingAlert.toggle()
                         }) {
                             Text("Add goal")
                                 .font(.caption)
                                 .foregroundColor(color)
-                        }.padding(.top, 30)
+                        }
+                            .padding(.top, 30)
+                            .alert("Edit \(title) goal", isPresented: $showingAlert) {
+                                TextField("ex: 92g", text: $newGoal)
+                                Button("OK", action: {
+                                    let desiredGoal = Int($newGoal.wrappedValue)
+                                    if desiredGoal != 0 {
+                                        // Save new goal
+                                        UserDefaults.standard.set(desiredGoal, forKey: "\(title.lowercased())Goal")
+                                        print("Setting UserDefaults \(title.lowercased())Goal")
+                                        print((desiredGoal ?? 0).description)
+                                        // Update goal in macro item view immediately without refreshing view
+                                        goalState = desiredGoal
+                                    }
+                                })
+                            } message: {
+                                Text("Enter your new goal:")
+                            }
                     }
                 }
             }
@@ -81,10 +111,9 @@ struct LargeCardView: View {
             title: "Calories",
             value: 1394,
             unit: "calories",
-            remaining: 300,
-            percentage: 80,
             color: .red,
-            time: "9:10 AM"
+            createdAt: Date(),
+            goal: 2000
         )
         .previewLayout(.sizeThatFits)
         .padding()
@@ -96,7 +125,8 @@ struct LargeCardView: View {
             value: 1394,
             unit: "calories",
             color: .red,
-            time: "9:10 AM"
+            createdAt: Date(),
+            goal: nil
         )
         .previewLayout(.sizeThatFits)
         .padding()

@@ -9,33 +9,38 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var showWelcomeScreen: Bool
+    @State private var selection: String
 
-    init() {
+
+    init(selection: String?) {
          // Check if the welcome screen has been shown before
          let hasShownWelcomeScreen = UserDefaults.standard.bool(forKey: "hasShownWelcomeScreen")
          _showWelcomeScreen = State(initialValue: !hasShownWelcomeScreen)
+        _selection = State.init(initialValue: selection ?? "Summary")
      }
     
 
     var body: some View {
-        TabView {
+        TabView(selection: $selection) {
             SummaryView()
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Summary")
-                }
+                }.tag("Summary")
             
             AddView()
                 .tabItem {
                     Image(systemName: "plus.circle.fill")
                     Text("Add new")
-                }
+                }.tag("Add")
             
             SettingsView()
                 .tabItem {
                     Image(systemName: "gearshape.fill")
                     Text("Settings")
+                    
                 }
+                .tag("Settings")
         }
         .sheet(isPresented: $showWelcomeScreen) {
             WelcomeView(showWelcomeScreen: $showWelcomeScreen)
@@ -47,24 +52,21 @@ struct MainTabView: View {
 
 struct AddView: View {
     var body: some View {
-        Text("Add Meal Page")
-            .font(.largeTitle)
-            .foregroundColor(.green)
-            .background(Color(UIColor.systemGray6))
-    }
-}
-
-struct SettingsView: View {
-    var body: some View {
-        Text("Settings Page")
-            .font(.largeTitle)
-            .foregroundColor(.red)
-            .background(Color(UIColor.systemGray6))
+        NavigationView {
+            ScrollView {
+                Text("Add meal")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding(.top, 40)
+            }
+        }
+        .background(Color(UIColor.systemGray6))
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
 #Preview {
-    return MainTabView()
-        .modelContainer(for: Meal.self, inMemory: true)
+    return MainTabView(selection: nil)
+        .modelContainer(for: [Weight.self, Meal.self], inMemory: true)
 }
 

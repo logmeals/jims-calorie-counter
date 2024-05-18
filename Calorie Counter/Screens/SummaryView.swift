@@ -23,8 +23,9 @@ struct SummaryView: View {
     
     init() {
         // Fetch calorie goal
-        let calorieGoal = UserDefaults.standard.integer(forKey: "calorieGoal")
+        let calorieGoal = UserDefaults.standard.integer(forKey: "caloriesGoal")
         _calorieGoal = State(initialValue: calorieGoal)
+        print("Setting calorie goal locally: \(calorieGoal)")
         // Fetch weight goal
         let weightGoal = UserDefaults.standard.integer(forKey: "weightGoal")
         _weightGoal = State(initialValue: weightGoal)
@@ -93,10 +94,9 @@ struct SummaryView: View {
                             title: "Calories",
                             value: macrosConsumed().calories,
                             unit: "calories",
-                            remaining: calorieGoal == 0 ? nil : (calorieGoal - macrosConsumed().calories),
-                            percentage: calorieGoal == 0 ? nil : (macrosConsumed().calories/(calorieGoal == 0 ? 1 : calorieGoal))*100,
                             color: .red,
-                            time: (latestTimestamp().meal != nil) ? formatTimestamp(date: latestTimestamp().meal ?? Date()) : "N/A"
+                            createdAt: latestTimestamp().meal,
+                            goal: calorieGoal != 0 ? calorieGoal : nil
                         )
                         .previewLayout(.sizeThatFits)
                         
@@ -104,13 +104,13 @@ struct SummaryView: View {
                             title: "Weight",
                             value: nil,
                             unit: "lbs",
-                            percentage: weightGoal != 0 ? 60 : nil,
                             color: .indigo,
-                            time: (latestTimestamp().weight != nil) ? formatTimestamp(date: latestTimestamp().weight ?? Date()) : "N/A"
+                            createdAt: latestTimestamp().weight,
+                            goal: weightGoal != 0 ? weightGoal : nil
                         )
                         
                         MacrosView(
-                            time: (latestTimestamp().meal != nil) ? formatTimestamp(date: latestTimestamp().meal ?? Date()) : "N/A",
+                            createdAt: latestTimestamp().meal,
                             proteinConsumed: macrosConsumed().protein,
                             proteinGoal: proteinGoal != 0 ? proteinGoal : nil,
                             carbohydratesConsumed: macrosConsumed().carbohydrates,
@@ -127,11 +127,13 @@ struct SummaryView: View {
                                 .font(.title2)
                                 .fontWeight(.semibold)
                             Spacer()
-                            Button(action: {
-                                // Edit action
-                            }) {
-                                Text("Show more")
-                                    .foregroundColor(.blue)
+                            if meals.count > 3 {
+                                Button(action: {
+                                    // Edit action
+                                }) {
+                                    Text("Show more")
+                                        .foregroundColor(.blue)
+                                }
                             }
                         }
                         ForEach(meals.filter { $0.reviewedAt == nil }) { meal in
@@ -155,6 +157,8 @@ struct SummaryView: View {
                                 .foregroundColor(.gray)
                                 .multilineTextAlignment(.center)
                                 .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.top, 10)
+                                .padding(.bottom, 40)
                         }
                     }
                 }
@@ -172,6 +176,6 @@ struct SummaryView: View {
 }
 
 #Preview {
-    return MainTabView()
-        .modelContainer(for: Meal.self, inMemory: true)
+    return MainTabView(selection: "Summary")
+        .modelContainer(for: [Weight.self, Meal.self], inMemory: true)
 }

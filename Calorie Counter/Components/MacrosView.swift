@@ -11,8 +11,20 @@ struct MacroItemView: View {
     var title: String
     var unit: String
     var consumed: Int
-    var goal: Int?
     var color: Color
+    var goal: Int?
+    @State private var showingAlert = false
+    @State private var newGoal = ""
+    @State private var goalState: Int?
+    
+    init(title: String, unit: String, consumed: Int, color: Color, goal: Int?) {
+        self.title = title
+        self.unit = unit
+        self.consumed = consumed
+        self.color = color
+        self.goal = goal
+        _goalState = State(initialValue: goal)
+    }
     
     var body: some View {
         HStack {
@@ -30,9 +42,9 @@ struct MacroItemView: View {
                 }
             }
             Spacer()
-            if let goal = goal {
-                let remaining = goal - consumed
-                let percentage = (goal != 0) ? Double(consumed) / Double(goal) * 100 : 0
+            if let goalState = goalState {
+                let remaining = goalState - consumed
+                let percentage = (goalState != 0) ? Double(consumed) / Double(goalState) * 100 : 0
                 HStack {
                     Text("\(remaining)g remaining")
                         .font(.caption)
@@ -42,9 +54,28 @@ struct MacroItemView: View {
                         .frame(width: 40, height: 40)
                 }
             } else {
-                Text("Set goal")
-                    .font(.caption)
-                    .foregroundColor(color)
+                Button(action: {
+                    showingAlert.toggle()
+                }) {
+                    Text("Set goal")
+                        .font(.caption)
+                        .foregroundColor(color)
+                        .padding(.top, 39)
+                }
+                .alert("Edit \(title) goal", isPresented: $showingAlert) {
+                    TextField("ex: 92g", text: $newGoal)
+                    Button("OK", action: {
+                        let desiredGoal = Int($newGoal.wrappedValue)
+                        if desiredGoal != 0 {
+                            // Save new goal
+                            UserDefaults.standard.set(desiredGoal, forKey: "\(title.lowercased())Goal")
+                            // Update goal in macro item view immediately without refreshing view
+                            goalState = desiredGoal
+                        }
+                    })
+                } message: {
+                    Text("Enter your new goal:")
+                }
             }
         }
     }
@@ -52,7 +83,7 @@ struct MacroItemView: View {
 
 
 struct MacrosView: View {
-    var time: String
+    var createdAt: Date?
     var proteinConsumed: Int?
     var proteinGoal: Int?
     var carbohydratesConsumed: Int?
@@ -67,7 +98,7 @@ struct MacrosView: View {
                     .font(.headline)
                     .foregroundColor(.purple)
                 Spacer()
-                Text(time)
+                Text((createdAt != nil) ? formatTimestamp(date: createdAt ?? Date()) : "N/A")
                     .font(.caption)
                     .foregroundColor(.gray)
             }
@@ -77,8 +108,7 @@ struct MacrosView: View {
                 title: "Protein",
                 unit: "g",
                 consumed: proteinConsumed ?? 0,
-                goal: proteinGoal,
-                color: .green
+                color: .green, goal: proteinGoal
             )
             
             Divider()
@@ -87,8 +117,7 @@ struct MacrosView: View {
                 title: "Carbohydrates",
                 unit: "g",
                 consumed: carbohydratesConsumed ?? 0,
-                goal: carbohydratesGoal,
-                color: .blue
+                color: .blue, goal: carbohydratesGoal
             )
             
             Divider()
@@ -97,8 +126,7 @@ struct MacrosView: View {
                 title: "Fats",
                 unit: "g",
                 consumed: fatsConsumed ?? 0,
-                goal: fatsGoal,
-                color: .orange
+                color: .orange, goal: fatsGoal
             )
         }
         .padding()
@@ -109,7 +137,7 @@ struct MacrosView: View {
 }
 
 #Preview("Mixed") {
-        MacrosView(time: "9:15 AM",
+        MacrosView(createdAt: Date(),
                    proteinConsumed: 113, proteinGoal: 150,
                    carbohydratesConsumed: 92, carbohydratesGoal: 123,
                    fatsConsumed: 43)
@@ -117,7 +145,7 @@ struct MacrosView: View {
 }
 
 #Preview("With goals") {
-        MacrosView(time: "9:15 AM",
+        MacrosView(createdAt: Date(),
                    proteinConsumed: 113, proteinGoal: 150,
                    carbohydratesConsumed: 92, carbohydratesGoal: 123,
                    fatsConsumed: 43, fatsGoal: 100)
@@ -125,7 +153,7 @@ struct MacrosView: View {
 }
 
 #Preview("Without goals") {
-        MacrosView(time: "9:15 AM",
+        MacrosView(createdAt: Date(),
                    proteinConsumed: 113,
                    carbohydratesConsumed: 92,
                    fatsConsumed: 43)
