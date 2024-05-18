@@ -10,16 +10,11 @@ import SwiftUI
 
 struct AddView: View {
     @Environment(\.modelContext) private var modelContext
-    @State private var caloriesGoal: String = "2,000 calories / day"
-    @State private var proteinGoal: String = "23g / day"
-    @State private var weightGoal: String = "192 lbs"
     @State private var askForDescription: Bool = true
-    @State private var mealsToShow: String = "3"
-    @State private var mealReminders: Bool = false
-    @State private var sendAnonymousData: Bool = true
     @State private var showingDescribeMealAlert: Bool = false
-    @State private var mealDescription: String = ""
     @Binding var selection: String
+    @Binding var navigateToProcessing: Bool
+    @Binding var mealDescription: String
 
     var body: some View {
         NavigationView {
@@ -43,36 +38,7 @@ struct AddView: View {
                                         let desiredMealDescription = $mealDescription.wrappedValue
                                         if desiredMealDescription != "" {
                                             // TODO: Move to Processing page?
-                                            print("Prompt sent to OpenAI")
-                                            callOpenAIAPIForMealDescription(mealDescription: desiredMealDescription) { result in
-                                                switch result {
-                                                case .success(let response):
-                                                    print("OpenAI Success")
-                                                    print(response)
-                                                    let meal = Meal(
-                                                        emoji: response["emoji"] as? String,
-                                                        createdAt: Date(),
-                                                        label: response["label"] as? String,
-                                                        details: desiredMealDescription,
-                                                        reviewedAt: Date(),
-                                                        calories: response["calories"] as? Int,
-                                                        protein: response["protein"] as? Int,
-                                                        carbohydrates: response["carbohydrates"] as? Int,
-                                                        fats: response["fats"] as? Int
-                                                    )
-                                                    modelContext.insert(meal)
-                                                    mealDescription = ""
-                                                    do {
-                                                        try modelContext.save()
-                                                        // TODO: Redirect to Meal detail page rather than Summary
-                                                        selection = "Summary"
-                                                    } catch {
-                                                        print(error)
-                                                    }
-                                                case .failure(let error):
-                                                    print("Error: \(error.localizedDescription)")
-                                                }
-                                            }
+                                            navigateToProcessing = true
                                         }
                                     })
                                     Button("Cancel", action: {

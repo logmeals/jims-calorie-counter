@@ -10,10 +10,11 @@ import SwiftData
 
 @main
 struct Calorie_CounterApp: App {
-
     var body: some Scene {
         WindowGroup {
-            MainTabView(selection: nil)
+            NavigationStack {
+                MainTabView(selection: nil)
+            }
         }
         .modelContainer(for: [Weight.self, Meal.self])
     }
