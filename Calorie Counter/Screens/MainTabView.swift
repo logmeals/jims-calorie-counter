@@ -28,7 +28,7 @@ struct MainTabView: View {
                     Text("Summary")
                 }.tag("Summary")
             
-            AddView()
+            AddView(selection: $selection)
                 .tabItem {
                     Image(systemName: "plus.circle.fill")
                     Text("Add new")

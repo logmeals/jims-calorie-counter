@@ -24,46 +24,47 @@ struct SettingsView: View {
                 VStack(spacing: 20) {
                     
                     settingsSection(header: "Favorites") {
-                        settingsRow(title: "Calories", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil)
+                        settingsRow(title: "Calories", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil, onTap: nil)
                             /*.onDrag {
                                 print("Dragging item: Calories")
                                 return NSItemProvider()
                             }*/
-                        settingsRow(title: "Weight", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil)
+                        settingsRow(title: "Weight", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil, onTap: nil)
                             /*.onDrag {
                                 print("Dragging item: Weight")
                                 return NSItemProvider()
                             }*/
-                        settingsRow(title: "Macros", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil)
-                        settingsRow(title: "Meals", value: nil, imageName: "Bars", lastRow: true, gray: true, danger: nil)
+                        settingsRow(title: "Macros", value: nil, imageName: "Bars", lastRow: true, gray: true, danger: nil, onTap: nil)
                     }
                     
                     settingsSection(header: "Goals") {
-                        settingsRow(title: "Calories", value: caloriesGoal, lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Protein", value: proteinGoal, lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Weight", value: weightGoal, lastRow: true, gray: nil, danger: nil)
+                        settingsRow(title: "Calories", value: caloriesGoal, lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Protein", value: proteinGoal, lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Carbohydrates", value: proteinGoal, lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Fats", value: proteinGoal, lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Weight", value: weightGoal, lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
                     
                     settingsSection(header: "Preferences") {
-                        settingsRow(title: "Ask for description on meal photos?", value: askForDescription ? "Yes" : "No", lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Meals to show by default?", value: mealsToShow, lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Meal reminders?", value: mealReminders ? "Enabled" : "Disabled", lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Send anonymous usage data?", value: sendAnonymousData ? "Enabled" : "Disabled", lastRow: true, gray: nil, danger: nil)
+                        settingsRow(title: "Ask for description on meal photos?", value: askForDescription ? "Yes" : "No", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Meals to show by default?", value: mealsToShow, lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Meal reminders?", value: mealReminders ? "Enabled" : "Disabled", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Send anonymous usage data?", value: sendAnonymousData ? "Enabled" : "Disabled", lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
                     
                     settingsSection(header: "Community") {
-                        settingsRow(title: "Join our Discord Community", imageName: "Discord", lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Refer a friend, get $5!", imageName: "Gift", lastRow: true, gray: nil, danger: nil)
+                        settingsRow(title: "Join our Discord Community", imageName: "Discord", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Refer a friend, get $5!", imageName: "Gift", lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
                     
                     settingsSection(header: "Support") {
-                        settingsRow(title: "Restore purchases", imageName: "Bag", lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Upgrade and unlock full access", imageName: "Lightning", lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Export data", imageName: "Export", lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Report bug", imageName: "Bug", lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Contact support", imageName: "Raft", lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "View Privacy Policy / EULA", imageName: "Building", lastRow: nil, gray: nil, danger: nil)
-                        settingsRow(title: "Delete all data", imageName: "Garbage", lastRow: true, gray: nil, danger: true)
+                        settingsRow(title: "Restore purchases", imageName: "Bag", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Upgrade and unlock full access", imageName: "Lightning", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Export data", imageName: "Export", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Report bug", imageName: "Bug", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Contact support", imageName: "Raft", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "View Privacy Policy / EULA", imageName: "Building", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Delete all data", imageName: "Garbage", lastRow: true, gray: nil, danger: true, onTap: nil)
                     }
                 }
                 .padding()

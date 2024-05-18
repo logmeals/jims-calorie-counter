@@ -31,8 +31,10 @@ func settingsSection<Content: View>(header: String, @ViewBuilder content: () -> 
 }
 
 @ViewBuilder
-func settingsRow(title: String, value: String? = nil, imageName: String? = nil, lastRow: Bool?, gray: Bool?, danger: Bool?) -> some View {
-    Button(action: { handleTap(option: title) }) {
+func settingsRow(title: String, value: String? = nil, imageName: String? = nil, lastRow: Bool?, gray: Bool?, danger: Bool?, onTap: ((String) -> Void)?) -> some View {
+    Button(action: { if onTap != nil {
+        onTap?(title)
+    }}) {
         HStack {
             Text(title)
                 .fontWeight(.medium)

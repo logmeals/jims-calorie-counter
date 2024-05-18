@@ -120,7 +120,7 @@ struct SummaryView: View {
                     }
                     
                     // Meals Section
-                    VStack(alignment: .leading, spacing: 15) {
+                    VStack(alignment: .leading, spacing: 10) {
                         HStack {
                             Text("Meals")
                                 .font(.title2)
