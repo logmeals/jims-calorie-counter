@@ -16,6 +16,7 @@ struct ProcessingView: View {
     @State private var step = 1
     @State private var timeToProcess: String?
     @State private var newMeal: Meal?
+    @State private var errorHasOccured: Bool = false
     var mealDescription: String
     var startTime: Date = Date()
     var onDismiss: () -> Void
@@ -54,11 +55,13 @@ struct ProcessingView: View {
                             step = 3
                         } catch {
                             print(error)
+                            errorHasOccured = true
                         }
                     }
                 case .failure(let error):
                     DispatchQueue.main.async {
                         print("Error: \(error.localizedDescription)")
+                        errorHasOccured = true
                     }
             }
         }
@@ -89,7 +92,11 @@ struct ProcessingView: View {
                 VStack(spacing: 0) {
                     HStack(spacing: 15) {
                         if step == 1 {
-                            ProgressView()
+                            if(errorHasOccured) {
+                                Text("❌")
+                            } else {
+                                ProgressView()
+                            }
                         }
                         if step > 1 {
                             Text("✅")
@@ -111,7 +118,11 @@ struct ProcessingView: View {
                             Text("✅").opacity(0)
                         }
                         if step == 2 {
-                            ProgressView()
+                            if(errorHasOccured) {
+                                Text("❌")
+                            } else {
+                                ProgressView()
+                            }
                         }
                         if step > 2 {
                             Text("✅")
@@ -132,8 +143,9 @@ struct ProcessingView: View {
                 .shadow(color: Color(UIColor.systemGray3), radius: 10)
             }
             Spacer()
+            
             // Meal preview
-            if newMeal != nil && step > 2 {
+            if !errorHasOccured && newMeal != nil && step > 2 {
                 VStack(spacing: 15) {
                     Text("Your meal finished processing in \((timeToProcess ?? "")) seconds")
                         .font(.subheadline)
@@ -151,10 +163,22 @@ struct ProcessingView: View {
                     )
                 }
             }
+            
+            // Error notification
+            if errorHasOccured {
+                VStack(spacing: 15) {
+                    Text("We were unable to add your meal. Check your meal description and OpenAI API Key, then try again.")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+            }
+                    
             Spacer()
             // Footer
             VStack(spacing:15) {
-                if timeToProcess == nil {
+                if timeToProcess == nil && !errorHasOccured {
                     Text("Your meal is processing, please hold.")
                         .font(.subheadline)
                         .foregroundColor(.gray)
@@ -172,7 +196,7 @@ struct ProcessingView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(step < 3 ? Color.gray : Color.blue)
+                        .background(step < 3 || errorHasOccured ? Color.gray : Color.blue)
                         .cornerRadius(10)
                 }
             }

@@ -28,6 +28,10 @@ struct SettingsView: View {
         return !editingGoal.isEmpty
     }
     
+    @State private var editingOpenAIKey: Bool = false
+    @State private var newOpenAIKey: String = ""
+    @State private var openAIKey: String = ""
+    
     init() {
         // Fetch calorie goal
         let calorieGoal = UserDefaults.standard.integer(forKey: "caloriesGoal")
@@ -57,6 +61,22 @@ struct SettingsView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
+                    settingsSection(header: "Preferences") {
+                        
+                        settingsRow(title: "OpenAI API Key", value: openAIKey != "" ? "******" : "N/A", lastRow: true, gray: nil, danger: nil, onTap: {_ in
+                            editingOpenAIKey = true
+                        })
+                        .onAppear {
+                            openAIKey = UserDefaults.standard.string(forKey: "openAIAPIKey") ?? ""
+                        }
+                        
+                        //settingsRow(title: "Ask for description on meal photos?", value: askForDescription ? "Yes" : "No", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        //settingsRow(title: "Meals to show by default?", value: mealsToShow, lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        //settingsRow(title: "Meal reminders?", value: mealReminders ? "Enabled" : "Disabled", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        //settingsRow(title: "Send anonymous usage data?", value: sendAnonymousData ? "Enabled" : "Disabled", lastRow: true, gray: nil, danger: nil, onTap: nil)
+                        
+                    }
+                    
                     /*
                     settingsSection(header: "Favorites") {
                         settingsRow(title: "Calories", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil, onTap: nil)
@@ -81,19 +101,14 @@ struct SettingsView: View {
                         //settingsRow(title: "Weight", value: "\(weightGoal)g/day", lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
                     
-                    /*
-                    settingsSection(header: "Preferences") {
-                        settingsRow(title: "Ask for description on meal photos?", value: askForDescription ? "Yes" : "No", lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        settingsRow(title: "Meals to show by default?", value: mealsToShow, lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        settingsRow(title: "Meal reminders?", value: mealReminders ? "Enabled" : "Disabled", lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        settingsRow(title: "Send anonymous usage data?", value: sendAnonymousData ? "Enabled" : "Disabled", lastRow: true, gray: nil, danger: nil, onTap: nil)
+                    settingsSection(header: "Community") {
+                        settingsRow(title: "Join our Discord Community", imageName: "Discord", lastRow: true, gray: nil, danger: nil, onTap: {_ in
+                                // TODO: Redirect to join Discord Link
+                            UIApplication.shared.open(URL(string: "https://discord.gg/TT8W6DfXHe")!)
+                        })
+                        // settingsRow(title: "Refer a friend, get $5!", imageName: "Gift", lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
                     
-                    settingsSection(header: "Community") {
-                        settingsRow(title: "Join our Discord Community", imageName: "Discord", lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        settingsRow(title: "Refer a friend, get $5!", imageName: "Gift", lastRow: true, gray: nil, danger: nil, onTap: nil)
-                    }
-                     */
                     
                     /*
                     settingsSection(header: "Support") {
@@ -144,6 +159,30 @@ struct SettingsView: View {
                     })
             } message: {
                 Text("Enter your new goal:")
+            }
+            .alert("Edit OpenAI API Key", isPresented: $editingOpenAIKey) {
+                TextField("ex: sk....", text: $newOpenAIKey)
+                Button("Save", action: {
+                    let desiredAPIKey = $newOpenAIKey.wrappedValue
+                    if desiredAPIKey != "" {
+                        // Save new API Key
+                        UserDefaults.standard.set(desiredAPIKey, forKey: "openAIAPIKey")
+                        openAIKey = desiredAPIKey
+                        newOpenAIKey = ""
+                    }
+                })
+                Button("Delete", action: {
+                    // Update User Defaults
+                    UserDefaults.standard.set(nil, forKey: "openAIAPIKey")
+                    openAIKey = ""
+                    newOpenAIKey = ""
+                })
+                Button("Cancel", action: {
+                    editingOpenAIKey = false
+                    newOpenAIKey = ""
+                })
+            } message: {
+                Text("Keys are stored securely on your device, and are never sent to anyone besides OpenAI.")
             }
             .background(Color(UIColor.systemGray6))
             .navigationTitle("Settings")

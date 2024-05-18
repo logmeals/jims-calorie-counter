@@ -60,6 +60,15 @@ func callOpenAIAPIForMealDescription(mealDescription: String, completion: @escap
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    // Ensure Open AI API Key exists
+    let openAIAPIKEY = UserDefaults.standard.string(forKey: "openAIAPIKey")
+    if openAIAPIKEY == "" {
+        print("Error: OpenAI API Keys not present.")
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "OpenAI API Keys not present."])))
+        return
+    }
+    
     request.addValue("Bearer \(Keys.sandboxKey)", forHTTPHeaderField: "Authorization") // Replace with your actual API key
     
     let parameters: [String: Any] = [

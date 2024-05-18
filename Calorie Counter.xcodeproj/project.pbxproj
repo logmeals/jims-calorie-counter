@@ -369,7 +369,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Calorie-Counter-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Calorie Counter";
+				INFOPLIST_KEY_CFBundleDisplayName = "Jim's";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "We use Apple Health to read and add nutrition data.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We use Apple Health to read and add nutrition data.";
@@ -408,7 +408,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Calorie-Counter-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Calorie Counter";
+				INFOPLIST_KEY_CFBundleDisplayName = "Jim's";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "We use Apple Health to read and add nutrition data.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We use Apple Health to read and add nutrition data.";

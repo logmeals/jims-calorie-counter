@@ -28,7 +28,7 @@ struct WelcomeView: View {
                 .padding(.horizontal)
                 .padding(.vertical, 20)
             
-            Text("Inspired by my personal weight loss journey, this app helps you track your nutrition quickly and securely, on-device.\n\nYou can add meals by taking a photo, describing them, or scanning their barcode. See diet summaries for any given day. Set nutrition goals, and track your weight.")
+            Text("Inspired by my personal weight loss journey, this app helps you track your nutrition quickly and securely, on-device.\n\nYou can add meals with a photo, description, or barcode. See nutrition summaries for any given day. Set goals, and track your weight.")
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)

@@ -42,15 +42,15 @@ struct MainTabView: View {
                     .tag("Settings")
             }
             NavigationLink(
-                            destination: ProcessingView(mealDescription: mealDescription) {
-                                selection = "Summary"
-                            }.modelContainer(for: [Meal.self]),
-                            isActive: $navigateToProcessing,
-                            label: {
-                                EmptyView()
-                            }
-                        )
-                        .hidden()
+                destination: ProcessingView(mealDescription: mealDescription) {
+                    selection = "Summary"
+                }.modelContainer(for: [Meal.self]),
+                isActive: $navigateToProcessing,
+                label: {
+                    EmptyView()
+                }
+            )
+            .hidden()
         }
         .sheet(isPresented: $showWelcomeScreen) {
             WelcomeView(showWelcomeScreen: $showWelcomeScreen)
