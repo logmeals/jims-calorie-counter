@@ -33,6 +33,7 @@ struct WelcomeView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
                 .padding(.bottom, 40)
+                .foregroundColor(Color(UIColor.systemGray))
             
             Button(action: {
                 // Set the flag to true and dismiss the welcome screen

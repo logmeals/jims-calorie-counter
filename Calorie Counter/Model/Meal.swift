@@ -23,7 +23,7 @@ final class Meal: Identifiable {
     
     init(emoji: String?, createdAt: Date?, label: String?, details: String?, reviewedAt: Date?, calories: Int?, protein: Int?, carbohydrates: Int?, fats: Int?) {
         self.id = UUID()
-        self.emoji = "⏳"
+        self.emoji = emoji ?? "🍎"
         self.createdAt = createdAt ?? Date()
         self.label = label
         self.details = details

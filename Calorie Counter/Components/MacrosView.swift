@@ -98,9 +98,11 @@ struct MacrosView: View {
                     .font(.headline)
                     .foregroundColor(.purple)
                 Spacer()
-                Text((createdAt != nil) ? formatTimestamp(date: createdAt ?? Date()) : "N/A")
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                if createdAt != nil {
+                    Text(formatTimestamp(date: createdAt ?? Date()))
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
             }
             
 

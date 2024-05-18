@@ -36,8 +36,8 @@ struct LargeCardView: View {
                         .font(.headline)
                         .foregroundColor(color)
                     Spacer()
-                    if let createdAt = createdAt {
-                        Text(formatTimestamp(date: createdAt))
+                    if createdAt != nil {
+                        Text(formatTimestamp(date: createdAt ?? Date()))
                             .font(.caption)
                             .foregroundColor(.gray)
                             .frame(maxWidth: 150, alignment: .trailing)

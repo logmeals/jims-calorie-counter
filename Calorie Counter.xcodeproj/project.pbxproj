@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3801EAB12BF9188100C204C2 /* ProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801EAB02BF9188100C204C2 /* ProcessingView.swift */; };
 		3853E41F2BF80FEE00958AB4 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E41E2BF80FEE00958AB4 /* Utilities.swift */; };
 		3853E4212BF8129900958AB4 /* MealProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E4202BF8129900958AB4 /* MealProcessingView.swift */; };
 		3853E4232BF8463B00958AB4 /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E4222BF8463B00958AB4 /* Weight.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3801EAB02BF9188100C204C2 /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
 		3853E41E2BF80FEE00958AB4 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		3853E4202BF8129900958AB4 /* MealProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealProcessingView.swift; sourceTree = "<group>"; };
 		3853E4222BF8463B00958AB4 /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				38C2ED672BF46C3E00B2C7C8 /* SummaryView.swift */,
 				3853E4242BF84AD300958AB4 /* SettingsView.swift */,
 				3853E4282BF85CC800958AB4 /* AddView.swift */,
+				3801EAB02BF9188100C204C2 /* ProcessingView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -224,6 +227,7 @@
 				38C2ED562BF4680E00B2C7C8 /* Calorie_CounterApp.swift in Sources */,
 				3853E42B2BF88E4B00958AB4 /* AI.swift in Sources */,
 				3853E4232BF8463B00958AB4 /* Weight.swift in Sources */,
+				3801EAB12BF9188100C204C2 /* ProcessingView.swift in Sources */,
 				3853E4252BF84AD300958AB4 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

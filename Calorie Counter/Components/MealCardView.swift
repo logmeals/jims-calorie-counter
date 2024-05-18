@@ -14,6 +14,7 @@ struct MealCardView: View {
     var carbohydrates: Int
     var fats: Int
     var createdAt: Date
+    var emoji: String
     
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -24,7 +25,7 @@ struct MealCardView: View {
                 Circle()
                     .stroke(Color.green.opacity(0.5), lineWidth: 2)
                     .frame(width: 40, height: 40)
-                Text("🍔")
+                Text(emoji)
                     .font(.system(size: 16))
             }
                 .padding(.top, 8)
@@ -61,7 +62,8 @@ struct MealCardView_Preview: PreviewProvider {
             protein: 17,
             carbohydrates: 24,
             fats: 13,
-            createdAt: Date()
+            createdAt: Date(),
+            emoji: "🍟"
         )
         .previewLayout(.sizeThatFits)
         .padding()

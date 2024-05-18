@@ -147,7 +147,8 @@ struct SummaryView: View {
                                     protein: meal.protein ?? 0,
                                     carbohydrates: meal.carbohydrates ?? 0,
                                     fats: meal.fats ?? 0,
-                                    createdAt: meal.createdAt
+                                    createdAt: meal.createdAt,
+                                    emoji: meal.emoji
                                 )
                         }
                         if meals.isEmpty {
