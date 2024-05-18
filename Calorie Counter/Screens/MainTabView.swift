@@ -49,22 +49,6 @@ struct MainTabView: View {
     }
 }
 
-
-struct AddView: View {
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                Text("Add meal")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .padding(.top, 40)
-            }
-        }
-        .background(Color(UIColor.systemGray6))
-        .edgesIgnoringSafeArea(.all)
-    }
-}
-
 #Preview {
     return MainTabView(selection: nil)
         .modelContainer(for: [Weight.self, Meal.self], inMemory: true)
