@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3801EAB12BF9188100C204C2 /* ProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801EAB02BF9188100C204C2 /* ProcessingView.swift */; };
 		3853E41F2BF80FEE00958AB4 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E41E2BF80FEE00958AB4 /* Utilities.swift */; };
-		3853E4212BF8129900958AB4 /* MealProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E4202BF8129900958AB4 /* MealProcessingView.swift */; };
 		3853E4232BF8463B00958AB4 /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E4222BF8463B00958AB4 /* Weight.swift */; };
 		3853E4252BF84AD300958AB4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E4242BF84AD300958AB4 /* SettingsView.swift */; };
 		3853E4272BF85AC500958AB4 /* Miscellaneous.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E4262BF85AC500958AB4 /* Miscellaneous.swift */; };
@@ -33,7 +32,6 @@
 		3801EAB02BF9188100C204C2 /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
 		3801EAB62BF946F600C204C2 /* Calorie-Counter-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Calorie-Counter-Info.plist"; sourceTree = SOURCE_ROOT; };
 		3853E41E2BF80FEE00958AB4 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
-		3853E4202BF8129900958AB4 /* MealProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealProcessingView.swift; sourceTree = "<group>"; };
 		3853E4222BF8463B00958AB4 /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
 		3853E4242BF84AD300958AB4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3853E4262BF85AC500958AB4 /* Miscellaneous.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Miscellaneous.swift; sourceTree = "<group>"; };
@@ -122,7 +120,6 @@
 				38C2ED712BF4815500B2C7C8 /* MacrosView.swift */,
 				38C2ED6B2BF4771600B2C7C8 /* LargeCardView.swift */,
 				3853E41E2BF80FEE00958AB4 /* Utilities.swift */,
-				3853E4202BF8129900958AB4 /* MealProcessingView.swift */,
 				3853E4262BF85AC500958AB4 /* Miscellaneous.swift */,
 				3853E42A2BF88E4B00958AB4 /* AI.swift */,
 				3853E42C2BF8906B00958AB4 /* Keys.swift */,
@@ -221,7 +218,6 @@
 				3853E41F2BF80FEE00958AB4 /* Utilities.swift in Sources */,
 				38C2ED702BF4804800B2C7C8 /* MainTabView.swift in Sources */,
 				38C2ED762BF4972E00B2C7C8 /* WelcomeView.swift in Sources */,
-				3853E4212BF8129900958AB4 /* MealProcessingView.swift in Sources */,
 				38C2ED682BF46C3E00B2C7C8 /* SummaryView.swift in Sources */,
 				3853E4272BF85AC500958AB4 /* Miscellaneous.swift in Sources */,
 				38C2ED6C2BF4771600B2C7C8 /* LargeCardView.swift in Sources */,
@@ -378,6 +374,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -418,6 +415,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

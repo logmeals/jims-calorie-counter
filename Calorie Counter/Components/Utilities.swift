@@ -8,6 +8,38 @@
 import Foundation
 import SwiftUI
 
+extension Date {
+    func isSameDay(as otherDate: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(self, inSameDayAs: otherDate)
+    }
+}
+
+struct DatePickerView: View {
+    @Binding var selectedDate: Date
+    @Binding var isPresented: Bool
+
+    var body: some View {
+        VStack {
+            DatePicker("Select a Date", selection: $selectedDate, displayedComponents: .date)
+                .datePickerStyle(WheelDatePickerStyle())
+                .labelsHidden()
+
+            Button(action: {
+                isPresented = false
+            }) {
+                Text("Done")
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+            .padding()
+        }
+        .padding()
+    }
+}
+
 func formatDate(_ date: Date) -> String {
     let calendar = Calendar.current
     let today = calendar.startOfDay(for: Date())

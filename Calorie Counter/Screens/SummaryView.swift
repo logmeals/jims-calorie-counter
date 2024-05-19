@@ -10,9 +10,26 @@ import SwiftData
 import Foundation
 
 struct SummaryView: View {
-    @State private var displayDate: String = ""
+    @State private var displayDate: Date = Date()
+    @State private var isDatePickerPresented: Bool = false
     @Environment(\.modelContext) private var context
+    
+    // Load meals
+    // Create a predicate for fetching meals created on the displayDate
+    private var datePredicate: Predicate<Meal> {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: displayDate)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        return #Predicate { meal in
+            meal.createdAt >= startOfDay && meal.createdAt < endOfDay
+        }
+    }
+    
     @Query private var meals: [Meal]
+
+    init() {
+        _meals = Query(filter: datePredicate)
+    }
     
     @AppStorage("caloriesGoal") private var caloriesGoalStored: Int = -1
     @AppStorage("proteinGoal") private var proteinGoalStored: Int = -1
@@ -45,17 +62,72 @@ struct SummaryView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     // Date and Summary Title
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Summary")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .onAppear {
-                                // Initialize local state with stored values
-                                caloriesGoal = caloriesGoalStored >= 0 ? caloriesGoalStored : nil
-                                proteinGoal = proteinGoalStored >= 0 ? proteinGoalStored : nil
-                                carbohydratesGoal = carbohydratesGoalStored >= 0 ? carbohydratesGoalStored : nil
-                                fatsGoal = fatsGoalStored >= 0 ? fatsGoalStored : nil
+                    HStack {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(formatDate(displayDate))
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Text("Summary")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .onAppear {
+                                    // Initialize local state with stored values
+                                    caloriesGoal = caloriesGoalStored >= 0 ? caloriesGoalStored : nil
+                                    proteinGoal = proteinGoalStored >= 0 ? proteinGoalStored : nil
+                                    carbohydratesGoal = carbohydratesGoalStored >= 0 ? carbohydratesGoalStored : nil
+                                    fatsGoal = fatsGoalStored >= 0 ? fatsGoalStored : nil
+                                }
+                        }
+                        Button(action: {
+                            isDatePickerPresented.toggle()
+                        }) {
+                            Image("Calendar")
+                                .resizable()
+                                .frame(width: 22, height: 22, alignment: .bottomTrailing)
+                                .padding(.top, 20)
+                        }
+                    }
+                    
+                    // Datepicker
+                    if isDatePickerPresented {
+                        VStack(spacing: 0) {
+                            DatePicker("Select a Date", selection: $displayDate, displayedComponents: .date)
+                                .datePickerStyle(WheelDatePickerStyle())
+                                .labelsHidden()
+                            HStack(spacing: 5) {
+                                Button(action: {
+                                    isDatePickerPresented.toggle()
+                                }) {
+                                    Text("Close Date Picker")
+                                        .fontWeight(.medium)
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(10)
+                                .background(Color.blue.opacity(0.2))
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.blue.opacity(0.65), lineWidth: 1)
+                                )
+                                Button(action: {
+                                    displayDate = Date()
+                                }) {
+                                    Image("Undo")
+                                        .resizable()
+                                        .frame(width: 24, height: 24)
+                                }
+                                .padding(10)
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.gray.opacity(0.45), lineWidth: 1)
+                                )
                             }
+                        }
                     }
 
                     // Favorites Section
@@ -124,11 +196,6 @@ struct SummaryView: View {
                                     // Edit action
                                 }) {}
                             }
-                        }
-                        ForEach(meals.filter { $0.reviewedAt == nil }) { meal in
-                            MealProcessingView(
-                                createdAt: meal.createdAt
-                            )
                         }
                         ForEach(meals.filter { $0.reviewedAt != nil }) { meal in
                             MealCardView(
