@@ -35,21 +35,21 @@ struct AddView: View {
                                 if openAIAPIKey != "" {
                                     showingDescribeMealAlert.toggle()
                                 }
-                            }
+                            }, grayValue: false
                         ).onAppear {
                             openAIAPIKey = UserDefaults.standard.string(forKey: "openAIAPIKey") ?? ""
                         }
                                 .alert("Describe your meal", isPresented: $showingDescribeMealAlert) {
                                     TextField("ex: A 12ct chicken nugget meal from Chickfila", text: $mealDescription)
+                                    Button("Cancel", action: {
+                                        showingDescribeMealAlert.toggle()
+                                    })
                                     Button("Save meal", action: {
                                         let desiredMealDescription = $mealDescription.wrappedValue
                                         if desiredMealDescription != "" {
                                             // TODO: Move to Processing page?
                                             navigateToProcessing = true
                                         }
-                                    })
-                                    Button("Cancel", action: {
-                                        showingDescribeMealAlert.toggle()
                                     })
                                 } message: {
                                     Text("Enter as much information as you can. ex: What and how much you ate, from where, modifications, etc")

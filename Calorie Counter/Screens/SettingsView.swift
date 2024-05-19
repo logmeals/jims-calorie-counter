@@ -16,11 +16,11 @@ struct SettingsView: View {
     @State private var sendAnonymousData: Bool = true
     
     @State private var newGoal: String = ""
-    @State private var calorieGoal: Int
-    // @State private var weightGoal: Int
-    @State private var proteinGoal: Int
-    @State private var carbohydratesGoal: Int
-    @State private var fatsGoal: Int
+    @State private var calorieGoal: Int = 0
+    // @State private var weightGoal: Int = 0
+    @State private var proteinGoal: Int = 0
+    @State private var carbohydratesGoal: Int = 0
+    @State private var fatsGoal: Int = 0
     
     @State private var editingGoal: String = ""
     // Computed property to check if editingGoal is not empty
@@ -31,26 +31,6 @@ struct SettingsView: View {
     @State private var editingOpenAIKey: Bool = false
     @State private var newOpenAIKey: String = ""
     @State private var openAIKey: String = ""
-    
-    init() {
-        // Fetch calorie goal
-        let calorieGoal = UserDefaults.standard.integer(forKey: "caloriesGoal")
-        _calorieGoal = State(initialValue: calorieGoal)
-        // Fetch weight goal
-        /*
-        let weightGoal = UserDefaults.standard.integer(forKey: "weightGoal")
-        _weightGoal = State(initialValue: weightGoal)
-        */
-        // Fetch protein goal
-        let proteinGoal = UserDefaults.standard.integer(forKey: "proteinGoal")
-        _proteinGoal = State(initialValue: proteinGoal)
-        // Fetch weight goal
-        let carbohydratesGoal = UserDefaults.standard.integer(forKey: "carbohydratesGoal")
-        _carbohydratesGoal = State(initialValue: carbohydratesGoal)
-        // Fetch weight goal
-        let fatsGoal = UserDefaults.standard.integer(forKey: "fatsGoal")
-        _fatsGoal = State(initialValue: fatsGoal)
-    }
     
     func editGoal(goal: String) {
         editingGoal = goal
@@ -65,7 +45,7 @@ struct SettingsView: View {
                         
                         settingsRow(title: "OpenAI API Key", value: openAIKey != "" ? "******" : "N/A", lastRow: true, gray: nil, danger: nil, onTap: {_ in
                             editingOpenAIKey = true
-                        })
+                        }, grayValue: openAIKey == "")
                         .onAppear {
                             openAIKey = UserDefaults.standard.string(forKey: "openAIAPIKey") ?? ""
                         }
@@ -94,10 +74,22 @@ struct SettingsView: View {
                     */
                      
                     settingsSection(header: "Goals") {
-                        settingsRow(title: "Calories", value: calorieGoal > 0 ? "\(calorieGoal) calories" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal)
-                        settingsRow(title: "Protein", value: proteinGoal > 0 ? "\(proteinGoal)g" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal)
-                        settingsRow(title: "Carbohydrates", value: carbohydratesGoal > 0 ? "\(carbohydratesGoal)g" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal)
-                        settingsRow(title: "Fats", value: fatsGoal > 0 ? "\(fatsGoal)g" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal)
+                        settingsRow(title: "Calories", value: calorieGoal > 0 ? "\(calorieGoal) calories" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal, grayValue: calorieGoal == 0)
+                            .onAppear {
+                                calorieGoal = UserDefaults.standard.integer(forKey: "caloriesGoal")
+                            }
+                        settingsRow(title: "Protein", value: proteinGoal > 0 ? "\(proteinGoal)g" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal, grayValue: proteinGoal == 0)
+                            .onAppear {
+                                proteinGoal = UserDefaults.standard.integer(forKey: "proteinGoal")
+                            }
+                        settingsRow(title: "Carbohydrates", value: carbohydratesGoal > 0 ? "\(carbohydratesGoal)g" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal, grayValue: carbohydratesGoal == 0)
+                            .onAppear {
+                                carbohydratesGoal = UserDefaults.standard.integer(forKey: "carbohydratesGoal")
+                            }
+                        settingsRow(title: "Fats", value: fatsGoal > 0 ? "\(fatsGoal)g" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal, grayValue: fatsGoal == 0)
+                            .onAppear {
+                                fatsGoal = UserDefaults.standard.integer(forKey: "fatsGoal")
+                            }
                         //settingsRow(title: "Weight", value: "\(weightGoal)g/day", lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
                     
@@ -105,7 +97,7 @@ struct SettingsView: View {
                         settingsRow(title: "Join our Discord Community", imageName: "Discord", lastRow: true, gray: nil, danger: nil, onTap: {_ in
                                 // TODO: Redirect to join Discord Link
                             UIApplication.shared.open(URL(string: "https://discord.gg/TT8W6DfXHe")!)
-                        })
+                        }, grayValue: false)
                         // settingsRow(title: "Refer a friend, get $5!", imageName: "Gift", lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
                     
@@ -143,6 +135,8 @@ struct SettingsView: View {
                         if(editingGoal.lowercased() == "carbohydrates") { carbohydratesGoal = desiredGoal ?? 0 }
                         if(editingGoal.lowercased() == "fats") {fatsGoal = desiredGoal ?? 0 }
                     }
+                    editingGoal = ""
+                    newGoal = ""
                 })
                     Button("Delete goal", action: {
                         // Update User Defaults
@@ -153,9 +147,11 @@ struct SettingsView: View {
                         if(editingGoal.lowercased() == "carbohydrates") { carbohydratesGoal = 0 }
                         if(editingGoal.lowercased() == "fats") {fatsGoal = 0 }
                         editingGoal = ""
+                        newGoal = ""
                     })
                     Button("Cancel", action: {
                         editingGoal = ""
+                        newGoal = ""
                     })
             } message: {
                 Text("Enter your new goal:")

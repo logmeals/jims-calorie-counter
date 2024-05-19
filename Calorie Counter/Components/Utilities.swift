@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 func formatDate(_ date: Date) -> String {
     let calendar = Calendar.current

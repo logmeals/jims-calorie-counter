@@ -13,21 +13,11 @@ struct LargeCardView: View {
     var unit: String
     var color: Color
     var createdAt: Date?
-    var goal: Int?
+    @Binding var goal: Int? // Make goal optional
+
     @State private var showingAlert = false
     @State private var newGoal = ""
-    @State private var goalState: Int?
-    
-    init(title: String, value: Int?, unit: String, color: Color, createdAt: Date?, goal: Int?) {
-        self.title = title
-        self.value = value
-        self.unit = unit
-        self.color = color
-        self.createdAt = createdAt
-        self.goal = goal
-        _goalState = State.init(initialValue: goal)
-    }
-    
+
     var body: some View {
         VStack {
             VStack {
@@ -36,14 +26,13 @@ struct LargeCardView: View {
                         .font(.headline)
                         .foregroundColor(color)
                     Spacer()
-                    if createdAt != nil {
-                        Text(formatTimestamp(date: createdAt ?? Date()))
+                    if let createdAt = createdAt {
+                        Text(formatTimestamp(date: createdAt))
                             .font(.caption)
                             .foregroundColor(.gray)
                             .frame(maxWidth: 150, alignment: .trailing)
                     }
                 }
-                
             }
             HStack {
                 HStack(alignment: .bottom, spacing: 10) {
@@ -56,43 +45,37 @@ struct LargeCardView: View {
                 }
                 Spacer()
                 HStack {
-                    if let goalState = goalState {
-                        Text("\(goalState - (value ?? 0)) \(unit) remaining")
+                    if let goal = goal {
+                        Text("\(goal - (value ?? 0)) \(unit) remaining")
                             .font(.caption)
                             .foregroundColor(.gray)
                             .lineLimit(2)
                             .frame(maxWidth: 120, alignment: .trailing)
                             .multilineTextAlignment(.trailing)
                             .padding(.trailing, 5)
-                        // Adjust max width to prevent overflow
-                    }
-                    if let goalState = goalState {
-                        CircularProgressView(percentage: Double((goalState != 0) ? Double(value ?? 0) / Double(goalState) * 100 : 0), color: color)
-                            .frame(width: 40, height: 40) // Adjust the size of the circular progress
+                        CircularProgressView(percentage: Double((goal != 0) ? Double(value ?? 0) / Double(goal) * 100 : 0), color: color)
+                            .frame(width: 40, height: 40)
                     } else {
                         Button(action: {
-                            // Button action
                             showingAlert.toggle()
                         }) {
                             Text("Add goal")
                                 .font(.caption)
                                 .foregroundColor(color)
                         }
-                            .padding(.top, 30)
-                            .alert("Edit \(title) goal", isPresented: $showingAlert) {
-                                TextField("ex: 92g", text: $newGoal)
-                                Button("OK", action: {
-                                    let desiredGoal = Int($newGoal.wrappedValue)
-                                    if desiredGoal != 0 {
-                                        // Save new goal
-                                        UserDefaults.standard.set(desiredGoal, forKey: "\(title.lowercased())Goal")
-                                        // Update goal in macro item view immediately without refreshing view
-                                        goalState = desiredGoal
-                                    }
-                                })
-                            } message: {
-                                Text("Enter your new goal:")
-                            }
+                        .padding(.top, 30)
+                        .alert("Edit \(title) goal", isPresented: $showingAlert) {
+                            TextField("ex: 92g", text: $newGoal)
+                            Button("OK", action: {
+                                if let desiredGoal = Int(newGoal) {
+                                    goal = desiredGoal
+                                } else {
+                                    goal = nil
+                                }
+                            })
+                        } message: {
+                            Text("Enter your new goal:")
+                        }
                     }
                 }
             }
@@ -102,30 +85,4 @@ struct LargeCardView: View {
         .cornerRadius(10)
         .shadow(radius: 5)
     }
-}
-
-#Preview("With goal") {
-        LargeCardView(
-            title: "Calories",
-            value: 1394,
-            unit: "calories",
-            color: .red,
-            createdAt: Date(),
-            goal: 2000
-        )
-        .previewLayout(.sizeThatFits)
-        .padding()
-}
-
-#Preview("Without goal") {
-        LargeCardView(
-            title: "Calories",
-            value: 1394,
-            unit: "calories",
-            color: .red,
-            createdAt: Date(),
-            goal: nil
-        )
-        .previewLayout(.sizeThatFits)
-        .padding()
 }
