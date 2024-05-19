@@ -31,8 +31,6 @@ struct ProcessingView: View {
             switch result {
                 case .success(let response):
                     DispatchQueue.main.async {
-                        print("OpenAI Success")
-                        print(response)
                         let meal = Meal(
                             emoji: response["emoji"] as? String,
                             createdAt: Date(),

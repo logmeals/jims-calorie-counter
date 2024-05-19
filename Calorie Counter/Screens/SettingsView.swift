@@ -34,7 +34,6 @@ struct SettingsView: View {
     
     func editGoal(goal: String) {
         editingGoal = goal
-        print("Editing \(goal) goal")
     }
 
     var body: some View {
@@ -61,12 +60,10 @@ struct SettingsView: View {
                     settingsSection(header: "Favorites") {
                         settingsRow(title: "Calories", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil, onTap: nil)
                             /*.onDrag {
-                                print("Dragging item: Calories")
                                 return NSItemProvider()
                             }*/
                         settingsRow(title: "Weight", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil, onTap: nil)
                             /*.onDrag {
-                                print("Dragging item: Weight")
                                 return NSItemProvider()
                             }*/
                         settingsRow(title: "Macros", value: nil, imageName: "Bars", lastRow: true, gray: true, danger: nil, onTap: nil)

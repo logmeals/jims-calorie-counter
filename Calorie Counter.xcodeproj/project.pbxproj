@@ -367,8 +367,10 @@
 				INFOPLIST_FILE = "Calorie-Counter-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Jim's";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We use your camera to add meals when requested.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "We use Apple Health to read and add nutrition data.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We use Apple Health to read and add nutrition data.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We use photos to add meals when requested.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -408,8 +410,10 @@
 				INFOPLIST_FILE = "Calorie-Counter-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Jim's";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We use your camera to add meals when requested.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "We use Apple Health to read and add nutrition data.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We use Apple Health to read and add nutrition data.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We use photos to add meals when requested.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
