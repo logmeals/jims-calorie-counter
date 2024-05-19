@@ -74,7 +74,7 @@ struct SettingsView: View {
                     */
                      
                     settingsSection(header: "Goals") {
-                        settingsRow(title: "Calories", value: calorieGoal > 0 ? "\(calorieGoal) calories" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal, grayValue: calorieGoal == 0)
+                        settingsRow(title: "Calories", value: calorieGoal > 0 ? "\(formatNumberWithCommas(calorieGoal)) calories" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal, grayValue: calorieGoal == 0)
                             .onAppear {
                                 calorieGoal = UserDefaults.standard.integer(forKey: "caloriesGoal")
                             }
