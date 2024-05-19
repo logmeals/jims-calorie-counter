@@ -1,4 +1,4 @@
-<h1><img src="https://github.com/jims-wl/calorie-counter/blob/master/Calorie%20Counter/Assets.xcassets/AppIcon.appiconset/Icon%20Raw.png?raw=true" width="30"/> Jim's Calorie Counter</h1>
+<h1><img src="https://avatars.githubusercontent.com/u/169850294?s=48&v=4" width="30"/> Jim's Calorie Counter</h1>
 An open-source calorie counter app for iPhones.
 
 #### You can use Jim's Calorie Counter to:
