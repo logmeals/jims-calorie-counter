@@ -12,24 +12,9 @@ import Foundation
 struct SummaryView: View {
     @State private var displayDate: Date = Date()
     @State private var isDatePickerPresented: Bool = false
-    @Environment(\.modelContext) private var context
-    
-    // Load meals
-    // Create a predicate for fetching meals created on the displayDate
-    private var datePredicate: Predicate<Meal> {
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: displayDate)
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-        return #Predicate { meal in
-            meal.createdAt >= startOfDay && meal.createdAt < endOfDay
-        }
-    }
-    
-    @Query private var meals: [Meal]
+    @Environment(\.modelContext) private var context: ModelContext
 
-    init() {
-        _meals = Query(filter: datePredicate)
-    }
+    @State private var meals: [Meal] = []
     
     @AppStorage("caloriesGoal") private var caloriesGoalStored: Int = -1
     @AppStorage("proteinGoal") private var proteinGoalStored: Int = -1
@@ -40,6 +25,24 @@ struct SummaryView: View {
     @State private var proteinGoal: Int?
     @State private var carbohydratesGoal: Int?
     @State private var fatsGoal: Int?
+
+    private var predicate: Predicate<Meal> {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: displayDate)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        return #Predicate { meal in
+            meal.createdAt >= startOfDay && meal.createdAt < endOfDay
+        }
+    }
+
+    func fetchMeals() {
+        do {
+            let fetchDescriptor = FetchDescriptor<Meal>(predicate: predicate)
+            meals = try context.fetch(fetchDescriptor)
+        } catch {
+            print("Failed to fetch meals: \(error)")
+        }
+    }
 
     func macrosConsumed() -> (calories: Int, protein: Int, carbohydrates: Int, fats: Int) {
         let totalCalories = meals.reduce(0) { $0 + ($1.calories ?? 0) }
@@ -56,7 +59,7 @@ struct SummaryView: View {
         
         return (weight: weightTimestamp, meal: mealTimestamp)
     }
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -78,6 +81,7 @@ struct SummaryView: View {
                                     proteinGoal = proteinGoalStored >= 0 ? proteinGoalStored : nil
                                     carbohydratesGoal = carbohydratesGoalStored >= 0 ? carbohydratesGoalStored : nil
                                     fatsGoal = fatsGoalStored >= 0 ? fatsGoalStored : nil
+                                    fetchMeals()
                                 }
                         }
                         Button(action: {
@@ -96,6 +100,9 @@ struct SummaryView: View {
                             DatePicker("Select a Date", selection: $displayDate, displayedComponents: .date)
                                 .datePickerStyle(WheelDatePickerStyle())
                                 .labelsHidden()
+                                .onChange(of: displayDate) { newValue in
+                                    fetchMeals()
+                                }
                             HStack(spacing: 5) {
                                 Button(action: {
                                     isDatePickerPresented.toggle()
@@ -114,6 +121,7 @@ struct SummaryView: View {
                                 )
                                 Button(action: {
                                     displayDate = Date()
+                                    fetchMeals()
                                 }) {
                                     Image("Undo")
                                         .resizable()
@@ -235,3 +243,4 @@ struct SummaryView: View {
     return MainTabView(selection: "Summary")
         .modelContainer(for: [Weight.self, Meal.self], inMemory: true)
 }
+
