@@ -19,6 +19,9 @@ struct AddView: View {
     @State private var imagePreview: UIImage?
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
 
+    @State private var showingBarcodeScanner: Bool = false
+    @Binding var barcode: String
+    
     @Binding var selection: String
     @Binding var navigateToProcessing: Bool
     @Binding var mealDescription: String
@@ -47,7 +50,7 @@ struct AddView: View {
                             sourceType = .photoLibrary
                             showingImagePicker.toggle()
                         }, grayValue: false)
-                        settingsRow(title: "Describe your meal", imageName: openAIAPIKey == "" ? "Lock" : "Chat", lastRow: true, gray: openAIAPIKey == "", danger: nil, onTap: {_ in
+                        settingsRow(title: "Describe your meal", imageName: openAIAPIKey == "" ? "Lock" : "Chat", lastRow: false, gray: openAIAPIKey == "", danger: nil, onTap: {_ in
                                 if openAIAPIKey != "" {
                                     showingDescribeMealAlert.toggle()
                                 }
@@ -71,7 +74,9 @@ struct AddView: View {
                                     Text("Enter as much information as you can. ex: What and how much you ate, from where, modifications, etc")
                                 }
                         
-                        // settingsRow(title: "Scan barcode", imageName: "Barcode", lastRow: true, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Scan barcode", imageName: "Barcode", lastRow: true, gray: nil, danger: nil, onTap: {_ in
+                            showingBarcodeScanner.toggle()
+                        }, grayValue: false)
                     }
                     
                     // Display warning if OpenAI API Key is not yet added.
@@ -112,7 +117,7 @@ struct AddView: View {
                 ImagePicker(
                     image: $imagePreview,
                     imageData: $imageData,
-                    sourceType: sourceType
+                    sourceType: $sourceType
                 )
             }
             .onChange(of: imageData) { _ in
@@ -121,6 +126,39 @@ struct AddView: View {
                     // Navigate to processing
                     navigateToProcessing = true
                 }
+            }
+            // Barcode scanner
+            .sheet(isPresented: $showingBarcodeScanner) {
+                VStack(spacing:25) {
+                    VStack(spacing: 5) {
+                        Text("Center barcode below:")
+                            .font(.title)
+                            .fontWeight(.medium)
+                            .foregroundColor(.black)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .multilineTextAlignment(.center)
+                        Text("Page will immediately exit and begin adding meal once barcode is captured.")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.gray)
+                    }
+                    BarcodeScannerView { code in
+                        // Save barcode for processing
+                        barcode = code
+                        // Close barcode scanner
+                        showingBarcodeScanner = false
+                        // Open processing page
+                        navigateToProcessing = true
+                    }
+                    .frame(maxWidth: .infinity)
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.blue, lineWidth: 4)
+                    )
+                }.padding()
             }
         }
     }

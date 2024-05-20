@@ -87,7 +87,7 @@ struct MealView: View {
                     } else {
                         Image(uiImage: UIImage(data: meal!.photo ?? Data()) ?? UIImage())
                             .resizable()
-                            .aspectRatio(contentMode: .fit) // Adjust content mode as needed
+                            .aspectRatio(contentMode: .fill) // Adjust content mode as needed
                             .frame(width: 60, height: 60) // Set desired width and height
                             .clipped() // Ensure the image fits within the specified frame
                             .cornerRadius(10)

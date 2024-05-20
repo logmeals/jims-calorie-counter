@@ -32,12 +32,12 @@ struct OpenAIResponse: Codable {
 func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, completion: @escaping (Result<[String: Any], Error>) -> Void) {
     // Ensure at least one of mealDescription or imageData is provided
     guard mealDescription != nil || imageData != nil else {
-        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No meal description or image data provided."])))
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No meal description or image provided."])))
         return
     }
 
     var prompt = """
-    You are an expert nutritionist. Based on the description of a meal and/or an image provided, your task is to estimate its nutritional content as best as you can and describe it concisely and accurately. Provide a short label (16 characters or less) that best describes the meal, alongside an emoji that describes the meal, and then estimate the calories, protein, carbohydrates, and fats in JSON format. Answer confidently and concisely! If a non-food image is attached or described, return an error and do not use the JSON format provided (or else your error might not be understood).
+    You are an expert nutritionist. Based on an item's description, and/or image provided, your task is to estimate its nutritional content (being the sum of the food+drinks pictured) as best as you can and describe it concisely and accurately. Provide a short label (16 characters or less) that best describes the meal, alongside an emoji that describes the meal, and then estimate the calories, protein, carbohydrates, and fats in JSON format. Answer confidently and concisely! If a non-food image/description is provided or you aren't able to provide an estimate, return an error and do not use the JSON format provided (or else your error might not be understood).
     
     \nResponse format:
     {
@@ -64,8 +64,8 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
     Now, process the following:\n
     """
 
-    if let mealDescription = mealDescription {
-        prompt += "\n\nDescription: \(mealDescription)"
+    if mealDescription != nil && mealDescription != "" {
+        prompt += "\n\nDescription: \(mealDescription ?? "")"
     }
 
     guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
@@ -170,8 +170,7 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
         }
         
         do {
-            print("Data received")
-            print(data)
+
             let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
             if let firstChoice = response.choices.first {
                 let responseData = firstChoice.message.content.data(using: .utf8)!
@@ -182,7 +181,8 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
                 completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No choices in response"])))
             }
         } catch {
-            print("Error decoding JSON response: \(error.localizedDescription)")
+            print("Error:")
+            print(String(describing: error)) // <- ✅ Use this for debuging!
             completion(.failure(error))
         }
     }

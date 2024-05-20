@@ -17,6 +17,7 @@ struct ProcessingView: View {
     @State private var timeToProcess: String?
     @State private var newMeal: Meal?
     @State private var errorHasOccured: Bool = false
+    @Binding var barcode: String
     @Binding var mealDescription: String
     @Binding var imageData: Data?
     @State private var startTime: Date = Date()
@@ -24,8 +25,44 @@ struct ProcessingView: View {
     
     func startProcessingMeal() {
         startTime = Date()
-        callOpenAIAPI(mealDescription: mealDescription, imageData: imageData) { result in
-            switch result {
+        if(barcode != nil && barcode != "") {
+            // Call Barcode API
+            fetchProductInfo(upc: barcode) { label, description, calories, protein, carbohydrates, fat in
+                step = 2
+                if let label = label {
+                    // TODO: Send results to GPT-3 to improve label + description, and generate emoji
+                    newMeal = Meal(
+                        emoji: "🌀",
+                        createdAt: Date(),
+                        label: label,
+                        details: description,
+                        reviewedAt: Date(),
+                        calories: Int(calories ?? 0.0),
+                        protein: Int(protein ?? 0.0),
+                        carbohydrates: Int(carbohydrates ?? 0.0),
+                        fats: Int(fat ?? 0.0),
+                        photo: nil
+                    )
+                    do {
+                        step = 3
+                        modelContext.insert(newMeal!)
+                        try modelContext.save()
+                        barcode = ""
+                        mealDescription = ""
+                        imageData = nil
+                    } catch {
+                        print("Error: Failed to save meal info from barcode.")
+                        errorHasOccured = true
+                    }
+                } else {
+                    print("Error: Failed to fetch product info from barcode.")
+                    errorHasOccured = true
+                }
+            }
+
+        } else {
+            callOpenAIAPI(mealDescription: mealDescription, imageData: imageData) { result in
+                switch result {
                 case .success(let response):
                     DispatchQueue.main.async {
                         let meal = Meal(
@@ -59,6 +96,7 @@ struct ProcessingView: View {
                         print("Error: \(error.localizedDescription)")
                         errorHasOccured = true
                     }
+                }
             }
         }
     }
@@ -186,6 +224,7 @@ struct ProcessingView: View {
                         // Clear variables
                         imageData = nil
                         mealDescription = ""
+                        barcode = ""
                         // Exit screen
                         dismiss() // Pop the view off the navigation stack
                         onDismiss() // Set the tab selection to "Summary"

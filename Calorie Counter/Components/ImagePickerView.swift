@@ -12,7 +12,7 @@ import UIKit
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
     @Binding var imageData: Data?
-    var sourceType: UIImagePickerController.SourceType
+    @Binding var sourceType: UIImagePickerController.SourceType
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         var parent: ImagePicker

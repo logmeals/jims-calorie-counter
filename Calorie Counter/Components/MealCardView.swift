@@ -34,7 +34,7 @@ struct MealCardView: View {
             } else if let uiImage = UIImage(data: imageData ?? Data()) {
                 Image(uiImage: uiImage)
                     .resizable()
-                    .aspectRatio(contentMode: .fit) // Adjust content mode as needed
+                    .aspectRatio(contentMode: .fill) // Adjust content mode as needed
                     .frame(width: 40, height: 40) // Set desired width and height
                     .clipped() // Ensure the image fits within the specified frame
                     .cornerRadius(10)
@@ -49,6 +49,7 @@ struct MealCardView: View {
                 HStack {
                     Text(label)
                         .font(.headline)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                         .foregroundColor(.black)
                     Spacer()
                     Text(formatTimestamp(date: createdAt))
