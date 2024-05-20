@@ -50,6 +50,8 @@ struct ProcessingView: View {
                         barcode = ""
                         mealDescription = ""
                         imageData = nil
+                        // Calculate time to process
+                        timeToProcess = String(format: "%.1f", Date().timeIntervalSince(startTime))
                     } catch {
                         print("Error: Failed to save meal info from barcode.")
                         errorHasOccured = true
