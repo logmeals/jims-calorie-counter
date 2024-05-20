@@ -46,6 +46,7 @@ struct MealView: View {
                 // Throw error
             } else {
                 meal = meals[0]
+                newDate = meal?.createdAt ?? Date()
             }
         } catch {
             print("Failed to fetch meals: \(error)")
@@ -253,22 +254,52 @@ struct MealView: View {
             })
         }
         .sheet(isPresented: $editingDate, content: {
-            DatePicker("Select date and time you ate this meal", selection: $newDate, displayedComponents: [.date, .hourAndMinute])
-            Button("Save", action: {
-                meal?.createdAt = newDate
-                // Exit sheet
-                editingDate = false
-                editingValue = ""
-                newValue = ""
-                newDate = Date()
-            })
-            Button("Cancel", action: {
-                editingDate = false
-                editingValue = ""
-                newValue = ""
-                newDate = Date()
+            VStack(spacing:10) {
+                Text("When did you eat this meal?")
+                    .font(.title2)
+                    .fontWeight(.medium)
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .multilineTextAlignment(.center)
+                DatePicker("Select date and time you ate this meal", selection: $newDate, displayedComponents: [.date, .hourAndMinute])
+                    .datePickerStyle(.graphical)
+                    .labelsHidden()
 
-            })
+                Spacer()
+                
+                Button(action: {
+                    meal?.createdAt = newDate
+                    // Exit sheet
+                    editingDate = false
+                    editingValue = ""
+                    newValue = ""
+                    newDate = Date()
+                }) {
+                    Text("Update and return")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.blue)
+                .cornerRadius(10)
+                
+                Button(action: {
+                    editingDate = false
+                    editingValue = ""
+                    newValue = ""
+                    newDate = Date()
+                }) {
+                    Text("Cancel")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.gray)
+                .cornerRadius(10)
+            }
+            .padding()
         })
     }
 }
