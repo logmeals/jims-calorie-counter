@@ -91,7 +91,15 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
     var content: Any
 
     if let imageData = imageData, let image = UIImage(data: imageData) {
-        if let base64Image = compressAndEncodeImage(image, compressionQuality: 0.35) {
+        var compressionQuality = UserDefaults.standard.double(forKey: "imageCompression")
+        
+        if compressionQuality > 1 {
+            compressionQuality = 1
+        }
+        if compressionQuality == 0 {
+            compressionQuality = 0.1
+        }
+        if let base64Image = compressAndEncodeImage(image, compressionQuality: compressionQuality) {
             content = [
                 [
                     "type": "text",
@@ -121,6 +129,7 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
             ]
         }
     } else {
+        print("Error: Sending image failed, uploading text prompt.")
         content = prompt
     }
 

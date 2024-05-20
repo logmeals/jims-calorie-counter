@@ -222,7 +222,8 @@ struct SummaryView: View {
                                     carbohydrates: meal.carbohydrates ?? 0,
                                     fats: meal.fats ?? 0,
                                     createdAt: meal.createdAt,
-                                    emoji: meal.emoji
+                                    emoji: meal.emoji,
+                                    imageData: meal.photo
                                 )
                             }
                         }

@@ -72,7 +72,7 @@ struct ProcessingView: View {
                     .fontWeight(.bold)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text(step < 3 ? "Do not exit - If you do, your meal will be discarded." : "Your meal has finished, you can now exit safely.")
+                Text(step < 3 ? "Do not exit - Your meal will be discarded." : "Your meal has finished, you can exit safely.")
                     .font(.subheadline)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.leading)

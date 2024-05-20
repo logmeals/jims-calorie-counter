@@ -32,6 +32,10 @@ struct SettingsView: View {
     @State private var newOpenAIKey: String = ""
     @State private var openAIKey: String = ""
     
+    @State private var editingImageCompression: Bool = false
+    @State private var newImageCompression: String = "0.5"
+    @State private var imageCompression: Double = 0.5
+    
     func editGoal(goal: String) {
         editingGoal = goal
     }
@@ -42,13 +46,27 @@ struct SettingsView: View {
                 VStack(spacing: 20) {
                     settingsSection(header: "Preferences") {
                         
-                        settingsRow(title: "OpenAI API Key", value: openAIKey != "" ? "******" : "N/A", lastRow: true, gray: nil, danger: nil, onTap: {_ in
+                        settingsRow(title: "OpenAI API Key", value: openAIKey != "" ? "******" : "N/A", lastRow: false, gray: nil, danger: nil, onTap: {_ in
                             editingOpenAIKey = true
                         }, grayValue: openAIKey == "")
                         .onAppear {
                             openAIKey = UserDefaults.standard.string(forKey: "openAIAPIKey") ?? ""
                         }
-                        
+                        settingsRow(title: "Image compression", value: imageCompression.description, lastRow: true, gray: nil, danger: nil, onTap: {_ in
+                            editingImageCompression = true
+                        }, grayValue: openAIKey == "")
+                        .onAppear {
+                            imageCompression = UserDefaults.standard.double(forKey: "imageCompression")
+                            // If zero
+                            if imageCompression == 0 {
+                                // Fix
+                                newImageCompression = "0.5"
+                                imageCompression = 0.5
+                                UserDefaults.standard.setValue(0.5, forKey: "imageCompression")
+                            } else {
+                                newImageCompression = imageCompression.description
+                            }
+                        }
                         //settingsRow(title: "Ask for description on meal photos?", value: askForDescription ? "Yes" : "No", lastRow: nil, gray: nil, danger: nil, onTap: nil)
                         //settingsRow(title: "Meals to show by default?", value: mealsToShow, lastRow: nil, gray: nil, danger: nil, onTap: nil)
                         //settingsRow(title: "Meal reminders?", value: mealReminders ? "Enabled" : "Disabled", lastRow: nil, gray: nil, danger: nil, onTap: nil)
@@ -176,6 +194,31 @@ struct SettingsView: View {
                 })
             } message: {
                 Text("Keys are stored securely on your device, and are never sent to anyone besides OpenAI.")
+            }
+            .alert("Edit Image compression rate", isPresented: $editingImageCompression) {
+                TextField("ex: 0.5", text: $newImageCompression)
+                    .keyboardType(.numberPad)
+                Button("Save", action: {
+                    imageCompression = Double(newImageCompression ?? "0.5") ?? 0.5
+                    // Max compression
+                    if(imageCompression > 1) {
+                        imageCompression = 1
+                        newImageCompression = "1.0"
+                    }
+                    // Min compression
+                    if(imageCompression == 0) {
+                        imageCompression = 0.35
+                        newImageCompression = "0.35"
+                    }
+                    UserDefaults.standard.set(imageCompression, forKey: "imageCompression")
+                    editingImageCompression.toggle()
+                })
+                Button("Cancel", action: {
+                    editingImageCompression.toggle()
+                    newImageCompression = imageCompression.description
+                })
+            } message: {
+                Text("1 = Highest Quality / No compression, .1 = Lowest Quality")
             }
             .background(Color(UIColor.systemGray6))
             .navigationTitle("Settings")

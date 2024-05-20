@@ -15,20 +15,35 @@ struct MealCardView: View {
     var fats: Int
     var createdAt: Date
     var emoji: String
+    var imageData: Data?
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Color.green.opacity(0.2))
-                    .frame(width: 40, height: 40)
-                Circle()
-                    .stroke(Color.green.opacity(0.5), lineWidth: 2)
-                    .frame(width: 40, height: 40)
-                Text(emoji)
-                    .font(.system(size: 16))
+            if imageData == nil {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10.0)
+                        .fill(Color.green.opacity(0.2))
+                        .frame(width: 40, height: 40)
+                    RoundedRectangle(cornerRadius: 10.0)
+                        .stroke(Color.green.opacity(0.5), lineWidth: 1)
+                        .frame(width: 40, height: 40)
+                    Text(emoji)
+                        .font(.system(size: 16))
+                }
+                .padding(.top, 8)
+            } else if let uiImage = UIImage(data: imageData ?? Data()) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit) // Adjust content mode as needed
+                    .frame(width: 40, height: 40) // Set desired width and height
+                    .clipped() // Ensure the image fits within the specified frame
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
+                    .padding(.top, 8)
             }
-            .padding(.top, 8)
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack {

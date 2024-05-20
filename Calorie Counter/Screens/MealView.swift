@@ -74,14 +74,29 @@ struct MealView: View {
                 Spacer()
                 
                 // Image
-                Text(meal?.emoji ?? "🍎")
-                    .padding()
-                    .background(Color.green.opacity(0.1))
-                    .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.green.opacity(0.3), lineWidth: 1)
-                    )
+                if meal != nil {
+                    if meal!.photo == nil {
+                        Text(meal?.emoji ?? "🍎")
+                            .padding()
+                            .background(Color.green.opacity(0.1))
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.green.opacity(0.3), lineWidth: 1)
+                            )
+                    } else {
+                        Image(uiImage: UIImage(data: meal!.photo ?? Data()) ?? UIImage())
+                            .resizable()
+                            .aspectRatio(contentMode: .fit) // Adjust content mode as needed
+                            .frame(width: 60, height: 60) // Set desired width and height
+                            .clipped() // Ensure the image fits within the specified frame
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                            )
+                    }
+                }
             }
             
             // Meal details
