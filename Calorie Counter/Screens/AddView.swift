@@ -40,15 +40,19 @@ struct AddView: View {
                     */
                     
                     settingsSection(header: "Meal") {
-                        settingsRow(title: "Take a photo of your meal", value: nil, imageName: "Camera", lastRow: nil, gray: false, danger: nil, onTap: {_ in
+                        settingsRow(title: "Take a photo of your meal", value: nil, imageName: openAIAPIKey == "" ? "Lock" : "Camera", lastRow: nil, gray: false, danger: nil, onTap: {_ in
+                            if openAIAPIKey != "" {
                                 // Activate camera
                                 sourceType = .camera
                                 showingImagePicker.toggle()
+                            }
                         }, grayValue: false)
-                        settingsRow(title: "Select meal photo from camera roll", imageName: "Photo", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
-                            // Activate camera roll
-                            sourceType = .photoLibrary
-                            showingImagePicker.toggle()
+                        settingsRow(title: "Select meal photo from camera roll", imageName: openAIAPIKey == "" ? "Lock" : "Photo", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
+                            if openAIAPIKey != "" {
+                                // Activate camera roll
+                                sourceType = .photoLibrary
+                                showingImagePicker.toggle()
+                            }
                         }, grayValue: false)
                         settingsRow(title: "Describe your meal", imageName: openAIAPIKey == "" ? "Lock" : "Chat", lastRow: false, gray: openAIAPIKey == "", danger: nil, onTap: {_ in
                                 if openAIAPIKey != "" {
