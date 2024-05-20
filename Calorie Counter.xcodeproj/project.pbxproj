@@ -27,6 +27,7 @@
 		38C2ED722BF4815500B2C7C8 /* MacrosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED712BF4815500B2C7C8 /* MacrosView.swift */; };
 		38C2ED742BF494D900B2C7C8 /* MealCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED732BF494D900B2C7C8 /* MealCardView.swift */; };
 		38C2ED762BF4972E00B2C7C8 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED752BF4972E00B2C7C8 /* WelcomeView.swift */; };
+		38F3589E2BFBBC3E006B2CF7 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F3589D2BFBBC3E006B2CF7 /* ImagePickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		38C2ED732BF494D900B2C7C8 /* MealCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCardView.swift; sourceTree = "<group>"; };
 		38C2ED752BF4972E00B2C7C8 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		38C2ED772BF6F35500B2C7C8 /* Calorie Counter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Calorie Counter.entitlements"; sourceTree = "<group>"; };
+		38F3589D2BFBBC3E006B2CF7 /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				3853E4262BF85AC500958AB4 /* Miscellaneous.swift */,
 				3853E42A2BF88E4B00958AB4 /* AI.swift */,
 				3853E42C2BF8906B00958AB4 /* Keys.swift */,
+				38F3589D2BFBBC3E006B2CF7 /* ImagePickerView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -231,6 +234,7 @@
 				3853E4232BF8463B00958AB4 /* Weight.swift in Sources */,
 				3801EAB12BF9188100C204C2 /* ProcessingView.swift in Sources */,
 				3853E4252BF84AD300958AB4 /* SettingsView.swift in Sources */,
+				38F3589E2BFBBC3E006B2CF7 /* ImagePickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,7 +390,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4.3;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "cx.jims.calorie-counter";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -429,7 +433,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4.3;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "cx.jims.calorie-counter";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

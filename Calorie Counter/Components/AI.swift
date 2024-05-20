@@ -18,13 +18,29 @@ struct OpenAIResponse: Codable {
     let choices: [Choice]
 }
 
-func callOpenAIAPIForMealDescription(mealDescription: String, completion: @escaping (Result<[String: Any], Error>) -> Void) {
-    let prompt = """
-    You are a nutritionist AI assistant. Based on the description of a meal provided, your task is to estimate its nutritional content. Provide a short label (16 characters or less) that best describes the meal, alongisde an emoji that describes the meal, and then estimate the calories, protein, carbohydrates, and fats in JSON format.
+func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, completion: @escaping (Result<[String: Any], Error>) -> Void) {
+    // Ensure at least one of mealDescription or imageData is provided
+    guard mealDescription != nil || imageData != nil else {
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No meal description or image data provided."])))
+        return
+    }
 
-    Description: \(mealDescription)
+    var prompt = """
+    You are an expert nutritionist. Based on the description of a meal and/or an image provided, your task is to estimate its nutritional content as best as you can and describe it concisely and accurately. Provide a short label (16 characters or less) that best describes the meal, alongside an emoji that describes the meal, and then estimate the calories, protein, carbohydrates, and fats in JSON format. Answer confidently and concisely! If a non-food image is attached or described, return an error and do not use the JSON format provided (or else your error might not be understood).
+    """
 
-    Response format:
+    if let mealDescription = mealDescription {
+        prompt += "\n\nDescription: \(mealDescription)"
+    }
+
+    if let imageData = imageData {
+        let base64String = imageData.base64EncodedString()
+        prompt += "\n\nImage (base64): \(base64String)"
+    }
+
+    prompt += """
+    
+    \nResponse format:
     {
         "label": "Short label",
         "emoji": "A single emoji that best represents this meal",
@@ -46,10 +62,17 @@ func callOpenAIAPIForMealDescription(mealDescription: String, completion: @escap
         "fats": 15
     }
 
-    Now, process the following meal description:
-
-    Description: \(mealDescription)
+    Now, process the following:
     """
+
+    if let mealDescription = mealDescription {
+        prompt += "\n\nDescription: \(mealDescription)"
+    }
+
+    if let imageData = imageData {
+        let base64String = imageData.base64EncodedString()
+        prompt += "\n\nImage (base64): \(base64String)"
+    }
 
     guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
         print("Error: Invalid URL")
@@ -69,13 +92,32 @@ func callOpenAIAPIForMealDescription(mealDescription: String, completion: @escap
         return
     }
     
-    request.addValue("Bearer \(Keys.sandboxKey)", forHTTPHeaderField: "Authorization") // Replace with your actual API key
+    request.addValue("Bearer \(openAIAPIKEY ?? "")", forHTTPHeaderField: "Authorization")
+    
+    var content: Any
+
+    if let imageData = imageData {
+        content = [
+            [
+                "type": "text",
+                "text": prompt
+            ],
+            [
+                "type": "image",
+                "image_url": imageData.base64EncodedString()
+            ]
+        ]
+    } else {
+        content = prompt
+    }
+
     
     let parameters: [String: Any] = [
         "model": "gpt-4o", // Replace with your desired model
         "messages": [
             ["role": "system", "content": "You are a helpful assistant."],
-            ["role": "user", "content": prompt]
+            ["role": "user", "content": content]
+            
         ],
         "max_tokens": 256,
         "temperature": 1.0,
@@ -106,6 +148,8 @@ func callOpenAIAPIForMealDescription(mealDescription: String, completion: @escap
         }
         
         do {
+            print("Data received")
+            print(data)
             let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
             if let firstChoice = response.choices.first {
                 let responseData = firstChoice.message.content.data(using: .utf8)!

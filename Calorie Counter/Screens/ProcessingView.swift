@@ -17,17 +17,13 @@ struct ProcessingView: View {
     @State private var timeToProcess: String?
     @State private var newMeal: Meal?
     @State private var errorHasOccured: Bool = false
-    var mealDescription: String
+    @Binding var mealDescription: String
+    @Binding var imageData: Data?
     var startTime: Date = Date()
     var onDismiss: () -> Void
     
-    init(mealDescription: String, onDismiss: @escaping () -> Void) {
-        self.mealDescription = mealDescription
-        self.onDismiss = onDismiss
-    }
-    
     func startProcessingMeal() {
-        callOpenAIAPIForMealDescription(mealDescription: mealDescription) { result in
+        callOpenAIAPI(mealDescription: mealDescription, imageData: imageData) { result in
             switch result {
                 case .success(let response):
                     DispatchQueue.main.async {
@@ -40,7 +36,8 @@ struct ProcessingView: View {
                             calories: response["calories"] as? Int ?? 0,
                             protein: response["protein"] as? Int ?? 0,
                             carbohydrates: response["carbohydrates"] as? Int ?? 0,
-                            fats: response["fats"] as? Int ?? 0
+                            fats: response["fats"] as? Int ?? 0,
+                            photo: imageData
                         )
                         modelContext.insert(meal)
                         do {
@@ -185,6 +182,10 @@ struct ProcessingView: View {
                 }
                 Button(action: {
                     DispatchQueue.main.async {
+                        // Clear variables
+                        imageData = nil
+                        mealDescription = ""
+                        // Exit screen
                         dismiss() // Pop the view off the navigation stack
                         onDismiss() // Set the tab selection to "Summary"
                     }

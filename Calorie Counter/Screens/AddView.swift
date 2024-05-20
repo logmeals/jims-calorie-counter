@@ -7,15 +7,23 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 
 struct AddView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var askForDescription: Bool = true
     @State private var showingDescribeMealAlert: Bool = false
     @State private var openAIAPIKey:String = ""
+    
+    @State private var showingImagePicker: Bool = false
+    @State private var imagePreview: UIImage?
+    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
+
     @Binding var selection: String
     @Binding var navigateToProcessing: Bool
     @Binding var mealDescription: String
+    @Binding var imageData: Data?
+
 
     var body: some View {
         NavigationView {
@@ -29,8 +37,16 @@ struct AddView: View {
                     */
                     
                     settingsSection(header: "Meal") {
-                        // settingsRow(title: "Take a photo of your meal", imageName: "Camera", lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        // settingsRow(title: "Select meal photo from camera roll", imageName: "Photo", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        settingsRow(title: "Take a photo of your meal", value: nil, imageName: "Camera", lastRow: nil, gray: false, danger: nil, onTap: {_ in
+                                // Activate camera
+                                sourceType = .camera
+                                showingImagePicker.toggle()
+                        }, grayValue: false)
+                        settingsRow(title: "Select meal photo from camera roll", imageName: "Photo", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
+                            // Activate camera roll
+                            sourceType = .photoLibrary
+                            showingImagePicker.toggle()
+                        }, grayValue: false)
                         settingsRow(title: "Describe your meal", imageName: openAIAPIKey == "" ? "Lock" : "Chat", lastRow: true, gray: openAIAPIKey == "", danger: nil, onTap: {_ in
                                 if openAIAPIKey != "" {
                                     showingDescribeMealAlert.toggle()
@@ -91,6 +107,21 @@ struct AddView: View {
             }
             .background(Color(UIColor.systemGray6))
             .navigationTitle("Add new")
+            // Camera
+            .sheet(isPresented: $showingImagePicker) {
+                ImagePicker(
+                    image: $imagePreview,
+                    imageData: $imageData,
+                    sourceType: sourceType
+                )
+            }
+            .onChange(of: imageData) { _ in
+                if let imageData = imageData {
+                    // TODO: Optionally, prompt for description based on preferences
+                    // Navigate to processing
+                    navigateToProcessing = true
+                }
+            }
         }
     }
 }

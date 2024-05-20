@@ -13,6 +13,7 @@ struct MainTabView: View {
     @State private var navigateToProcessing: Bool = false
     @State private var navigateToMeal: Bool = false
     @State private var mealDescription: String = ""
+    @State private var imageData: Data?
     // TODO: Fix exclamation point?
     @State private var mealId: UUID
 
@@ -32,7 +33,7 @@ struct MainTabView: View {
                         Text("Summary")
                     }.tag("Summary")
 
-                AddView(selection: $selection, navigateToProcessing: $navigateToProcessing, mealDescription: $mealDescription)
+                AddView(selection: $selection, navigateToProcessing: $navigateToProcessing, mealDescription: $mealDescription, imageData: $imageData)
                     .tabItem {
                         Image(systemName: "plus.circle.fill")
                         Text("Add new")
@@ -46,7 +47,7 @@ struct MainTabView: View {
                     .tag("Settings")
             }
             NavigationLink(
-                destination: ProcessingView(mealDescription: mealDescription) {
+                destination: ProcessingView(mealDescription: $mealDescription, imageData: $imageData) {
                     selection = "Summary"
                 },
                 isActive: $navigateToProcessing,
