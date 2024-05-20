@@ -5,7 +5,18 @@
 //  Created by Jim Bisenius on 5/18/24.
 //
 
+import SwiftUI
 import Foundation
+
+func compressAndEncodeImage(_ image: UIImage, compressionQuality: CGFloat) -> String? {
+    // Compress the image
+    guard let compressedImageData = image.jpegData(compressionQuality: compressionQuality) else {
+        return nil
+    }
+    
+    // Encode the compressed image data to a base64 string
+    return compressedImageData.base64EncodedString()
+}
 
 struct OpenAIResponse: Codable {
     struct Choice: Codable {
@@ -27,18 +38,6 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
 
     var prompt = """
     You are an expert nutritionist. Based on the description of a meal and/or an image provided, your task is to estimate its nutritional content as best as you can and describe it concisely and accurately. Provide a short label (16 characters or less) that best describes the meal, alongside an emoji that describes the meal, and then estimate the calories, protein, carbohydrates, and fats in JSON format. Answer confidently and concisely! If a non-food image is attached or described, return an error and do not use the JSON format provided (or else your error might not be understood).
-    """
-
-    if let mealDescription = mealDescription {
-        prompt += "\n\nDescription: \(mealDescription)"
-    }
-
-    if let imageData = imageData {
-        let base64String = imageData.base64EncodedString()
-        prompt += "\n\nImage (base64): \(base64String)"
-    }
-
-    prompt += """
     
     \nResponse format:
     {
@@ -62,16 +61,11 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
         "fats": 15
     }
 
-    Now, process the following:
+    Now, process the following:\n
     """
 
     if let mealDescription = mealDescription {
         prompt += "\n\nDescription: \(mealDescription)"
-    }
-
-    if let imageData = imageData {
-        let base64String = imageData.base64EncodedString()
-        prompt += "\n\nImage (base64): \(base64String)"
     }
 
     guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
@@ -97,14 +91,18 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
     var content: Any
 
     if let imageData = imageData {
+        let image = UIImage(data: imageData) ?? UIImage()
+        let base64Image = compressAndEncodeImage(image, compressionQuality: 0.5) // Compress image
         content = [
             [
                 "type": "text",
                 "text": prompt
             ],
             [
-                "type": "image",
-                "image_url": imageData.base64EncodedString()
+                "type": "image_url",
+                "image_url": [
+                    "url": "data:image/jpeg;base64,\(base64Image)"
+                ]
             ]
         ]
     } else {
