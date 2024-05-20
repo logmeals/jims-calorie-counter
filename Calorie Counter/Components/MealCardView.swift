@@ -15,7 +15,7 @@ struct MealCardView: View {
     var fats: Int
     var createdAt: Date
     var emoji: String
-    
+
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             ZStack {
@@ -28,8 +28,8 @@ struct MealCardView: View {
                 Text(emoji)
                     .font(.system(size: 16))
             }
-                .padding(.top, 8)
-            
+            .padding(.top, 8)
+
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(label)

@@ -245,7 +245,6 @@ struct SummaryView: View {
             .background(Color(UIColor.systemGray6))
             .edgesIgnoringSafeArea(.all)
         }
-        .modelContainer(for: Meal.self)
     }
 }
 

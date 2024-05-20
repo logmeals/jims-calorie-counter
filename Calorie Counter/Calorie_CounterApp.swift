@@ -16,6 +16,6 @@ struct Calorie_CounterApp: App {
                 MainTabView(selection: nil)
             }
         }
-        .modelContainer(for: [Weight.self, Meal.self])
+        .modelContainer(for: [Weight.self, Meal.self], isAutosaveEnabled: false)
     }
 }

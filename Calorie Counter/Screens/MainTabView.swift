@@ -48,7 +48,7 @@ struct MainTabView: View {
             NavigationLink(
                 destination: ProcessingView(mealDescription: mealDescription) {
                     selection = "Summary"
-                }.modelContainer(for: [Meal.self]),
+                },
                 isActive: $navigateToProcessing,
                 label: {
                     EmptyView()
@@ -59,7 +59,7 @@ struct MainTabView: View {
             NavigationLink(
                 destination: MealView(mealId: mealId) {
                     selection = "Summary"
-                }.modelContainer(for: [Meal.self]),
+                },
                 isActive: $navigateToMeal,
                 label: {
                     EmptyView()
@@ -70,7 +70,6 @@ struct MainTabView: View {
         .sheet(isPresented: $showWelcomeScreen) {
             WelcomeView(showWelcomeScreen: $showWelcomeScreen)
         }
-        .modelContainer(for: [Weight.self, Meal.self])
     }
 }
 
