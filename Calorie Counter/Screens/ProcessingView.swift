@@ -19,10 +19,11 @@ struct ProcessingView: View {
     @State private var errorHasOccured: Bool = false
     @Binding var mealDescription: String
     @Binding var imageData: Data?
-    var startTime: Date = Date()
+    @State private var startTime: Date = Date()
     var onDismiss: () -> Void
     
     func startProcessingMeal() {
+        startTime = Date()
         callOpenAIAPI(mealDescription: mealDescription, imageData: imageData) { result in
             switch result {
                 case .success(let response):

@@ -90,21 +90,36 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
     
     var content: Any
 
-    if let imageData = imageData {
-        let image = UIImage(data: imageData) ?? UIImage()
-        let base64Image = compressAndEncodeImage(image, compressionQuality: 0.5) // Compress image
-        content = [
-            [
-                "type": "text",
-                "text": prompt
-            ],
-            [
-                "type": "image_url",
-                "image_url": [
-                    "url": "data:image/jpeg;base64,\(base64Image)"
+    if let imageData = imageData, let image = UIImage(data: imageData) {
+        if let base64Image = compressAndEncodeImage(image, compressionQuality: 0.35) {
+            content = [
+                [
+                    "type": "text",
+                    "text": prompt
+                ],
+                [
+                    "type": "image_url",
+                    "image_url": [
+                        "url": "data:image/jpeg;base64,\(base64Image)"
+                    ]
                 ]
             ]
-        ]
+        } else {
+            // Upload raw image if compression fails
+            print("Compression failed uploading raw image")
+            content = [
+                [
+                    "type": "text",
+                    "text": prompt
+                ],
+                [
+                    "type": "image_url",
+                    "image_url": [
+                        "url": "data:image/jpeg;base64,\(imageData.base64EncodedString())"
+                    ]
+                ]
+            ]
+        }
     } else {
         content = prompt
     }
