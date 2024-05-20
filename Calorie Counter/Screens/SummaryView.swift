@@ -25,6 +25,9 @@ struct SummaryView: View {
     @State private var proteinGoal: Int?
     @State private var carbohydratesGoal: Int?
     @State private var fatsGoal: Int?
+    @Binding var navigateToMeal: Bool
+    @Binding var mealId: UUID
+
 
     private var predicate: Predicate<Meal> {
         let calendar = Calendar.current
@@ -206,15 +209,22 @@ struct SummaryView: View {
                             }
                         }
                         ForEach(meals.filter { $0.reviewedAt != nil }) { meal in
-                            MealCardView(
-                                label: meal.label ?? "N/A",
-                                calories: meal.calories ?? 0,
-                                protein: meal.protein ?? 0,
-                                carbohydrates: meal.carbohydrates ?? 0,
-                                fats: meal.fats ?? 0,
-                                createdAt: meal.createdAt,
-                                emoji: meal.emoji
-                            )
+                            Button(action: {
+                                // Open Meal Detail on Tap
+                                mealId = meal.id ?? UUID()
+                                navigateToMeal = true
+                                
+                            }) {
+                                MealCardView(
+                                    label: meal.label ?? "N/A",
+                                    calories: meal.calories ?? 0,
+                                    protein: meal.protein ?? 0,
+                                    carbohydrates: meal.carbohydrates ?? 0,
+                                    fats: meal.fats ?? 0,
+                                    createdAt: meal.createdAt,
+                                    emoji: meal.emoji
+                                )
+                            }
                         }
                         if meals.isEmpty {
                             Text("You haven't added any meals yet.")

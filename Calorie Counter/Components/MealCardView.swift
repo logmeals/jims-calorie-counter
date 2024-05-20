@@ -34,6 +34,7 @@ struct MealCardView: View {
                 HStack {
                     Text(label)
                         .font(.headline)
+                        .foregroundColor(.black)
                     Spacer()
                     Text(formatTimestamp(date: createdAt))
                         .font(.caption)

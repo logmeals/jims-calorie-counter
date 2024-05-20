@@ -15,6 +15,7 @@
 		3853E4292BF85CC800958AB4 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E4282BF85CC800958AB4 /* AddView.swift */; };
 		3853E42B2BF88E4B00958AB4 /* AI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E42A2BF88E4B00958AB4 /* AI.swift */; };
 		3853E42D2BF8906B00958AB4 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E42C2BF8906B00958AB4 /* Keys.swift */; };
+		389B41672BFAD6E300354B0E /* MealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 389B41662BFAD6E300354B0E /* MealView.swift */; };
 		38C2ED562BF4680E00B2C7C8 /* Calorie_CounterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C2ED552BF4680E00B2C7C8 /* Calorie_CounterApp.swift */; };
 		38C2ED5C2BF4681000B2C7C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38C2ED5B2BF4681000B2C7C8 /* Assets.xcassets */; };
 		38C2ED5F2BF4681000B2C7C8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38C2ED5E2BF4681000B2C7C8 /* Preview Assets.xcassets */; };
@@ -38,6 +39,7 @@
 		3853E4282BF85CC800958AB4 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		3853E42A2BF88E4B00958AB4 /* AI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AI.swift; sourceTree = "<group>"; };
 		3853E42C2BF8906B00958AB4 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		389B41662BFAD6E300354B0E /* MealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealView.swift; sourceTree = "<group>"; };
 		38C2ED522BF4680E00B2C7C8 /* Calorie Counter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Calorie Counter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		38C2ED552BF4680E00B2C7C8 /* Calorie_CounterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calorie_CounterApp.swift; sourceTree = "<group>"; };
 		38C2ED5B2BF4681000B2C7C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				3853E4242BF84AD300958AB4 /* SettingsView.swift */,
 				3853E4282BF85CC800958AB4 /* AddView.swift */,
 				3801EAB02BF9188100C204C2 /* ProcessingView.swift */,
+				389B41662BFAD6E300354B0E /* MealView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -215,6 +218,7 @@
 				38C2ED742BF494D900B2C7C8 /* MealCardView.swift in Sources */,
 				3853E4292BF85CC800958AB4 /* AddView.swift in Sources */,
 				38C2ED662BF4685200B2C7C8 /* Meal.swift in Sources */,
+				389B41672BFAD6E300354B0E /* MealView.swift in Sources */,
 				3853E41F2BF80FEE00958AB4 /* Utilities.swift in Sources */,
 				38C2ED702BF4804800B2C7C8 /* MainTabView.swift in Sources */,
 				38C2ED762BF4972E00B2C7C8 /* WelcomeView.swift in Sources */,
@@ -382,7 +386,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.3.1;
+				MARKETING_VERSION = 0.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "cx.jims.calorie-counter";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -425,7 +429,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.3.1;
+				MARKETING_VERSION = 0.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "cx.jims.calorie-counter";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

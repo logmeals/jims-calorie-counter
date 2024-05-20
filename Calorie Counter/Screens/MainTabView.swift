@@ -11,18 +11,22 @@ struct MainTabView: View {
     @State private var showWelcomeScreen: Bool
     @State private var selection: String
     @State private var navigateToProcessing: Bool = false
+    @State private var navigateToMeal: Bool = false
     @State private var mealDescription: String = ""
+    // TODO: Fix exclamation point?
+    @State private var mealId: UUID
 
     init(selection: String?) {
         let hasShownWelcomeScreen = UserDefaults.standard.bool(forKey: "hasShownWelcomeScreen")
         _showWelcomeScreen = State(initialValue: !hasShownWelcomeScreen)
         _selection = State(initialValue: selection ?? "Summary")
+        mealId = UUID()
     }
 
     var body: some View {
         VStack {
             TabView(selection: $selection) {
-                SummaryView()
+                SummaryView(navigateToMeal: $navigateToMeal, mealId: $mealId)
                     .tabItem {
                         Image(systemName: "house.fill")
                         Text("Summary")
@@ -46,6 +50,17 @@ struct MainTabView: View {
                     selection = "Summary"
                 }.modelContainer(for: [Meal.self]),
                 isActive: $navigateToProcessing,
+                label: {
+                    EmptyView()
+                }
+            )
+            .hidden()
+            
+            NavigationLink(
+                destination: MealView(mealId: mealId) {
+                    selection = "Summary"
+                }.modelContainer(for: [Meal.self]),
+                isActive: $navigateToMeal,
                 label: {
                     EmptyView()
                 }

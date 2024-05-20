@@ -35,26 +35,47 @@ func settingsRow(title: String, value: String? = nil, imageName: String? = nil, 
     Button(action: { if onTap != nil {
         onTap?(title)
     }}) {
-        HStack {
-            Text(title)
-                .fontWeight(.medium)
-                .foregroundColor(danger == true ? Color.red : gray == true ? Color(UIColor.systemGray) : Color.black)
-            Spacer()
-            if let value = value {
-                Text(value)
-                    .foregroundColor(grayValue == false ? .blue : Color(UIColor.systemGray2))
+        if((value ?? "").count < 23) {
+            HStack {
+                Text(title)
+                    .fontWeight(.medium)
+                    .foregroundColor(danger == true ? Color.red : gray == true ? Color(UIColor.systemGray) : Color.black)
+                    .frame(minWidth: 100, alignment: .leading)
+                Spacer()
+                if let value = value {
+                    Text(value)
+                        .foregroundColor(grayValue == false ? .blue : Color(UIColor.systemGray2))
+                }
+                if let imageName = imageName {
+                    Image(imageName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 22, height: 22)
+                        .foregroundColor(.blue)
+                }
             }
-            if let imageName = imageName {
-                Image(imageName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 22, height: 22)
-                    .foregroundColor(.blue)
+            .padding()
+            .background(danger == true ? Color.red.opacity(0.12) : Color.white)
+            .contentShape(Rectangle())
+        } else {
+            VStack {
+                Text(title)
+                    .fontWeight(.medium)
+                    .foregroundColor(danger == true ? Color.red : gray == true ? Color(UIColor.systemGray) : Color.black)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                if let value = value {
+                    Text(value)
+                        .foregroundColor(grayValue == false ? .blue : Color(UIColor.systemGray2))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        .padding(.top, 1)
+                }
             }
+            .padding()
+            .background(danger == true ? Color.red.opacity(0.12) : Color.white)
+            .contentShape(Rectangle())
         }
-        .padding()
-        .background(danger == true ? Color.red.opacity(0.12) : Color.white)
-        .contentShape(Rectangle())
     }
     .overlay(
         Rectangle()
