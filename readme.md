@@ -10,4 +10,7 @@ An open-source calorie counter app for iPhones.
 - Count unlimited calories without a pesky monthly subscription
 
 ## Need help?
-Contact Jim Bisenius at [support@jims.cx](mailto:support@jims.cx).
+Contact Jim Bisenius at [jim@logmeals.com](mailto:jim@logmeals.com).
+
+## License
+This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International. See the [LICENSE](./LICENSE.md) file for more details.
