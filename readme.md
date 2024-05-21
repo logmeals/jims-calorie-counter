@@ -1,5 +1,5 @@
 <h1><img src="https://avatars.githubusercontent.com/u/169850294?s=48&v=4" width="30"/> Jim's Calorie Counter</h1>
-An open-source calorie counter app for iPhones.<br>
+A source-available calorie counter app for iPhones.<br>
 
 #### You can use Jim's Calorie Counter to:
 - Easily track what you're eating
