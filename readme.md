@@ -5,7 +5,7 @@
 </h1>
 
 
-#### An open-source calorie counter app for iPhones. You can use Jim's Calorie Counter to:
+#### A privacy-first, source-available calorie counter app for iOS. You can use Jim's Calorie Counter to:
 - Easily track what you're eating from a meal photo, description, or barcode
 - Set goals for your daily calories, protein, carbohydrates, and fats consumption
 - See a summary each day's meals and nutrition details from a glance
