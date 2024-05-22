@@ -13,8 +13,8 @@
 
 And since our project was designed to run locally without any additional APIs, **there are no monthly fees.**
 
-#### Available now via Testflight, 100% free for a limited time:
-<a href="https://testflight.apple.com/join/jeJhdDVC" target="_blank"><img src="./misc/app-store.png" height="60"/></a>
+#### Available on the App Store ($15 one-time fee):
+<a href="https://apps.apple.com/us/app/jims-calorie-counter/id6502675845" target="_blank"><img src="./misc/app-store.png" height="60"/></a>
 <br>*Once live on the App Store, Testflight downloads will be invalidated.<br/>Users will be able to re-download using the App Store for a $15 one-time fee.*
 
 #### Join our Discord community:
