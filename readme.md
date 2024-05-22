@@ -1,7 +1,7 @@
 <h1>
     <img src="https://avatars.githubusercontent.com/u/169850294?s=48&v=4" width="30"/>
     Jim's Calorie Counter
-    <img src="https://img.shields.io/badge/Version-0.6.2 BETA-yellow" align="right" alt="Version 0.6.2"/>
+    <img src="https://img.shields.io/badge/Version-0.6.4 BETA-yellow" align="right" alt="Version 0.6.4"/>
 </h1>
 
 
