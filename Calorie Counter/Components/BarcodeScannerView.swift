@@ -94,6 +94,13 @@ struct Nutriments: Codable {
     let proteins: Double?
     let carbohydrates: Double?
     let fat: Double?
+    
+    enum CodingKeys: String, CodingKey {
+        case energy_kcal = "energy-kcal"
+        case proteins
+        case carbohydrates
+        case fat
+    }
 }
 
 func fetchProductInfo(upc: String, completion: @escaping (String?, String?, Double?, Double?, Double?, Double?) -> Void) {
@@ -108,13 +115,11 @@ func fetchProductInfo(upc: String, completion: @escaping (String?, String?, Doub
     var request = URLRequest(url: url)
     request.setValue("Jim's Calorie Counter - iOS - Version 1.0 - www.jims.cx", forHTTPHeaderField: "User-Agent")
 
-
-
     // Create the URLSession data task
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         guard let data = data, error == nil else {
             print("Error:")
-            print(error)
+            print(error ?? "Unknown error")
             completion(nil, nil, nil, nil, nil, nil)
             return
         }
@@ -130,7 +135,7 @@ func fetchProductInfo(upc: String, completion: @escaping (String?, String?, Doub
             // Extract relevant details
             let label = product.product_name
             let description = product.product_name // You can change this if there's a more appropriate field
-            let calories = product.nutriments?.energy_kcal 
+            let calories = product.nutriments?.energy_kcal
             let protein = product.nutriments?.proteins
             let carbohydrates = product.nutriments?.carbohydrates
             let fat = product.nutriments?.fat
@@ -138,7 +143,7 @@ func fetchProductInfo(upc: String, completion: @escaping (String?, String?, Doub
             // Call the completion handler with the extracted details
             completion(label, description, calories, protein, carbohydrates, fat)
         } catch {
-            print("Error")
+            print("Error parsing JSON:")
             print(error)
             completion(nil, nil, nil, nil, nil, nil)
         }

@@ -90,9 +90,10 @@ struct SummaryView: View {
                         Button(action: {
                             isDatePickerPresented.toggle()
                         }) {
-                            Image("Calendar")
+                            Image(systemName: "calendar")
                                 .resizable()
-                                .frame(width: 22, height: 22, alignment: .bottomTrailing)
+                                .foregroundColor(.gray)  // Apply gray color
+                                .frame(width: 18, height: 18, alignment: .bottomTrailing)
                                 .padding(.top, 20)
                         }
                     }

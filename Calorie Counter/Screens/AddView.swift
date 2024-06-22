@@ -40,24 +40,17 @@ struct AddView: View {
                     */
                     
                     settingsSection(header: "Meal") {
-                        settingsRow(title: "Take a photo of your meal", value: nil, imageName: openAIAPIKey == "" ? "Lock" : "Camera", lastRow: nil, gray: openAIAPIKey == "", danger: nil, onTap: {_ in
-                            if openAIAPIKey != "" {
-                                // Activate camera
+                        settingsRow(title: "Take a photo of your meal", value: nil, imageName: "Camera", lastRow: nil, gray: false, danger: nil, onTap: {_ in
                                 sourceType = .camera
                                 showingImagePicker.toggle()
-                            }
                         }, grayValue: false)
-                        settingsRow(title: "Select meal photo from camera roll", imageName: openAIAPIKey == "" ? "Lock" : "Photo", lastRow: nil, gray: openAIAPIKey == "", danger: nil, onTap: {_ in
-                            if openAIAPIKey != "" {
+                        settingsRow(title: "Select meal photo from camera roll", imageName: "Photo", lastRow: nil, gray: false, danger: nil, onTap: {_ in
                                 // Activate camera roll
                                 sourceType = .photoLibrary
                                 showingImagePicker.toggle()
-                            }
                         }, grayValue: false)
-                        settingsRow(title: "Describe your meal", imageName: openAIAPIKey == "" ? "Lock" : "Chat", lastRow: false, gray: openAIAPIKey == "", danger: nil, onTap: {_ in
-                                if openAIAPIKey != "" {
-                                    showingDescribeMealAlert.toggle()
-                                }
+                        settingsRow(title: "Describe your meal", imageName: "Chat", lastRow: false, gray: false, danger: nil, onTap: {_ in
+                                showingDescribeMealAlert.toggle()
                             }, grayValue: false
                         ).onAppear {
                             openAIAPIKey = UserDefaults.standard.string(forKey: "openAIAPIKey") ?? ""
@@ -81,35 +74,6 @@ struct AddView: View {
                         settingsRow(title: "Scan barcode", imageName: "Barcode", lastRow: true, gray: nil, danger: nil, onTap: {_ in
                             showingBarcodeScanner.toggle()
                         }, grayValue: false)
-                    }
-                    
-                    // Display warning if OpenAI API Key is not yet added.
-                    if(openAIAPIKey == "") {
-                        HStack(spacing: 20) {
-                            Text("🛑")
-                                .font(. system(size: 48))
-                            VStack(spacing:5) {
-                                Text("Stop!")
-                                    .font(. system(size: 18))
-                                    .foregroundColor(Color.red)
-                                    .fontWeight(.bold)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .multilineTextAlignment(.leading)
-                                Text("Before you can add meals, you need to add your OpenAI API Key in settings.")
-                                    .font(. system(size: 14))
-                                    .foregroundColor(Color.red.opacity(0.8))
-                                    .fontWeight(.medium)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .multilineTextAlignment(.leading)
-                            }
-                        }
-                        .padding()
-                        .background(Color.red.opacity(0.1))
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color(UIColor.red), lineWidth: 1)
-                        )
                     }
                 }
                 .padding()

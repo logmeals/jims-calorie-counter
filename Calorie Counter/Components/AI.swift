@@ -30,6 +30,7 @@ struct OpenAIResponse: Codable {
 }
 
 func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, completion: @escaping (Result<[String: Any], Error>) -> Void) {
+    print("Using OpenAI API")
     // Ensure at least one of mealDescription or imageData is provided
     guard mealDescription != nil || imageData != nil else {
         completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No meal description or image provided."])))
@@ -135,7 +136,7 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
 
     
     let parameters: [String: Any] = [
-        "model": "gpt-4o", // Replace with your desired model
+        "model": "gpt-4", // Replace with your desired model
         "messages": [
             ["role": "system", "content": "You are a helpful assistant."],
             ["role": "user", "content": content]
@@ -170,7 +171,9 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
         }
         
         do {
-
+            let jsonResponseString = String(data: data, encoding: .utf8) ?? "No data"
+            print("OpenAI JSON Response: \(jsonResponseString)")
+            
             let response = try JSONDecoder().decode(OpenAIResponse.self, from: data)
             if let firstChoice = response.choices.first {
                 let responseData = firstChoice.message.content.data(using: .utf8)!
@@ -181,8 +184,218 @@ func callOpenAIAPI(mealDescription: String? = nil, imageData: Data? = nil, compl
                 completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No choices in response"])))
             }
         } catch {
-            print("Error:")
-            print(String(describing: error)) // <- ✅ Use this for debuging!
+            print("Error parsing JSON: \(error.localizedDescription)")
+            completion(.failure(error))
+        }
+    }
+    
+    task.resume()
+}
+
+func callCloudAIAPI(mealDescription: String? = nil, imageData: Data? = nil, completion: @escaping (Result<[String: Any], Error>) -> Void) {
+    print("Using Cloud AI API")
+    // Ensure at least one of mealDescription or imageData is provided
+    guard mealDescription != nil || imageData != nil else {
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No meal description or image provided."])))
+        return
+    }
+
+    // Fetch userId from UserDefaults
+    if let userId = UserDefaults.standard.string(forKey: "userId"), !userId.isEmpty {
+        print("User ID: \(userId)")
+        // Proceed with the API call using the existing userId
+        callEstimateAPI(userId: userId, mealDescription: mealDescription, imageData: imageData, completion: completion)
+    } else {
+        // Create userId by making a POST request to 'https://api.jims.cx/create-user-id'
+        createUserAndFetchId { result in
+            switch result {
+            case .success(let userId):
+                // Store userId in UserDefaults
+                UserDefaults.standard.set(userId, forKey: "userId")
+                print("Created new User ID: \(userId)")
+                // Proceed with the API call using the new userId
+                callEstimateAPI(userId: userId, mealDescription: mealDescription, imageData: imageData, completion: completion)
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+}
+
+func createUserAndFetchId(completion: @escaping (Result<String, Error>) -> Void) {
+    guard let url = URL(string: "https://api.jims.cx/create-user-id") else {
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL for user creation"])))
+        return
+    }
+
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+
+        guard let data = data else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+            return
+        }
+
+        do {
+            let jsonResponseString = String(data: data, encoding: .utf8) ?? "No data"
+            print("Create User ID JSON Response: \(jsonResponseString)")
+            
+            if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+               let userId = jsonResponse["userId"] as? String {
+                completion(.success(userId))
+            } else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON response"])))
+            }
+        } catch {
+            completion(.failure(error))
+        }
+    }
+
+    task.resume()
+}
+
+private func callEstimateAPI(userId: String, mealDescription: String?, imageData: Data?, completion: @escaping (Result<[String: Any], Error>) -> Void) {
+    guard let url = URL(string: "https://api.jims.cx/estimate") else {
+        print("Error: Invalid URL")
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+        return
+    }
+
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    // Prepare the request body
+    var requestBody: [String: Any] = ["userId": userId, "gptModel": "gpt-4o"]
+
+    if let mealDescription = mealDescription, !mealDescription.isEmpty {
+        requestBody["details"] = mealDescription
+    }
+
+    if let imageData = imageData {
+        requestBody["imageBase64"] = imageData.base64EncodedString()
+    }
+
+    do {
+        request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: [])
+    } catch {
+        print("Error encoding JSON body: \(error.localizedDescription)")
+        completion(.failure(error))
+        return
+    }
+
+    // Perform the network request
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print("Error: \(error.localizedDescription)")
+            completion(.failure(error))
+            return
+        }
+
+        guard let data = data else {
+            print("Error: No data received!")
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+            return
+        }
+
+        do {
+            let jsonResponseString = String(data: data, encoding: .utf8) ?? "No data"
+            print("Cloud AI JSON Response: \(jsonResponseString)")
+            
+            if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                // Ensure the required keys are present
+                if let label = jsonResponse["label"] as? String,
+                   let emoji = jsonResponse["emoji"] as? String,
+                   let calories = jsonResponse["calories"] as? Int,
+                   let protein = jsonResponse["protein"] as? Int,
+                   let carbohydrates = jsonResponse["carbohydrates"] as? Int,
+                   let fats = jsonResponse["fats"] as? Int {
+                    let result: [String: Any] = [
+                        "label": label,
+                        "emoji": emoji,
+                        "calories": calories,
+                        "protein": protein,
+                        "carbohydrates": carbohydrates,
+                        "fats": fats
+                    ]
+                    completion(.success(result))
+                } else {
+                    print("Error: Missing keys in response")
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Missing keys in response"])))
+                }
+            } else {
+                print("Error: Unable to parse JSON response")
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to parse JSON response"])))
+            }
+        } catch {
+            print("Error parsing JSON: \(error.localizedDescription)")
+            completion(.failure(error))
+        }
+    }
+
+    task.resume()
+}
+
+func callAIAPI(mealDescription: String? = nil, imageData: Data? = nil, completion: @escaping (Result<[String: Any], Error>) -> Void) {
+    let openAIAPIKey = UserDefaults.standard.string(forKey: "openAIAPIKey") ?? ""
+    
+    if !openAIAPIKey.isEmpty {
+        callOpenAIAPI(mealDescription: mealDescription, imageData: imageData, completion: completion)
+    } else {
+        callCloudAIAPI(mealDescription: mealDescription, imageData: imageData, completion: completion)
+    }
+}
+
+func tokensRemaining(completion: @escaping (Result<Int, Error>) -> Void) {
+    guard let userId = UserDefaults.standard.string(forKey: "userId"), !userId.isEmpty else {
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "User ID not found in UserDefaults"])))
+        return
+    }
+    
+    guard let url = URL(string: "https://api.jims.cx/tokens") else {
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+        return
+    }
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    let requestBody: [String: Any] = ["userId": userId]
+    
+    do {
+        request.httpBody = try JSONSerialization.data(withJSONObject: requestBody, options: [])
+    } catch {
+        completion(.failure(error))
+        return
+    }
+    
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+        
+        guard let data = data else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+            return
+        }
+        
+        do {
+            if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+               let tokens = jsonResponse["tokens"] as? Int {
+                completion(.success(tokens))
+            } else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON response"])))
+            }
+        } catch {
             completion(.failure(error))
         }
     }

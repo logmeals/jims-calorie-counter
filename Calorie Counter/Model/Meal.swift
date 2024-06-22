@@ -1,5 +1,5 @@
 //
-//  Item.swift
+//  Meal.swift
 //  Calorie Counter
 //
 //  Created by Jim Bisenius on 5/14/24.

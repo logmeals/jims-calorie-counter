@@ -31,16 +31,27 @@ func settingsSection<Content: View>(header: String, @ViewBuilder content: () -> 
 }
 
 @ViewBuilder
-func settingsRow(title: String, value: String? = nil, imageName: String? = nil, lastRow: Bool?, gray: Bool?, danger: Bool?, onTap: ((String) -> Void)?, grayValue: Bool?) -> some View {
+func settingsRow(title: String, subtitle: String? = nil, value: String? = nil, imageName: String? = nil, lastRow: Bool?, gray: Bool?, danger: Bool?, onTap: ((String) -> Void)?, grayValue: Bool?) -> some View {
     Button(action: { if onTap != nil {
         onTap?(title)
     }}) {
         if((value ?? "").count < 23) {
             HStack {
-                Text(title)
-                    .fontWeight(.medium)
-                    .foregroundColor(danger == true ? Color.red : gray == true ? Color(UIColor.systemGray) : Color.black)
-                    .frame(minWidth: 100, alignment: .leading)
+                VStack {
+                    Text(title)
+                        .fontWeight(.medium)
+                        .foregroundColor(danger == true ? Color.red : gray == true ? Color(UIColor.systemGray) : Color.black)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    if let subtitle = subtitle {
+                        Text(subtitle)
+                            .foregroundColor(.black.opacity(0.65))
+                            .fontWeight(.medium)
+                            .font(.caption)
+                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                .frame(minWidth: 100, alignment: .leading)
                 Spacer()
                 if let value = value {
                     Text(value)

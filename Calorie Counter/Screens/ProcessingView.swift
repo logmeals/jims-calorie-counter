@@ -63,7 +63,7 @@ struct ProcessingView: View {
             }
 
         } else {
-            callOpenAIAPI(mealDescription: mealDescription, imageData: imageData) { result in
+            callAIAPI(mealDescription: mealDescription, imageData: imageData) { result in
                 switch result {
                 case .success(let response):
                     DispatchQueue.main.async {

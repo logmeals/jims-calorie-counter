@@ -11,7 +11,9 @@ struct MainTabView: View {
     @State private var showWelcomeScreen: Bool
     @State private var selection: String
     @State private var navigateToProcessing: Bool = false
+    @State private var navigateToPurchase: Bool = false
     @State private var navigateToMeal: Bool = false
+    @State private var navigateToSettings: Bool = false
     @State private var barcode: String = ""
     @State private var mealDescription: String = ""
     @State private var imageData: Data?
@@ -39,14 +41,39 @@ struct MainTabView: View {
                         Image(systemName: "plus.circle.fill")
                         Text("Add new")
                     }.tag("Add")
+                
+                ChartsView(navigateToSettings: $navigateToSettings)
+                    .tabItem {
+                        Image(systemName: "chart.bar.fill")
+                        Text("Charts")
+                    }
+                    .tag("Charts")
 
-                SettingsView()
+                /*
+                 SettingsView()
                     .tabItem {
                         Image(systemName: "gearshape.fill")
                         Text("Settings")
                     }
                     .tag("Settings")
+                 */
             }
+            NavigationLink(
+                destination: SettingsView(navigateToPurchase: $navigateToPurchase),
+                isActive: $navigateToSettings,
+                label: {
+                    EmptyView()
+                }
+            ).hidden()
+            
+            NavigationLink(
+                destination: PurchaseView(),
+                isActive: $navigateToPurchase,
+                label: {
+                    EmptyView()
+                }
+            )
+            
             NavigationLink(
                 destination: ProcessingView(barcode: $barcode, mealDescription: $mealDescription, imageData: $imageData) {
                     selection = "Summary"

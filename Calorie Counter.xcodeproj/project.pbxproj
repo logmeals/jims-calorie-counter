@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		3801EAB12BF9188100C204C2 /* ProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801EAB02BF9188100C204C2 /* ProcessingView.swift */; };
+		384E8FE22C241A3D0011B397 /* ChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384E8FE12C241A3D0011B397 /* ChartsView.swift */; };
+		384E8FE42C24494E0011B397 /* PurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384E8FE32C24494E0011B397 /* PurchaseView.swift */; };
+		384E8FE62C24F6C30011B397 /* InAppPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384E8FE52C24F6C30011B397 /* InAppPurchases.swift */; };
 		3853E41F2BF80FEE00958AB4 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E41E2BF80FEE00958AB4 /* Utilities.swift */; };
 		3853E4232BF8463B00958AB4 /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E4222BF8463B00958AB4 /* Weight.swift */; };
 		3853E4252BF84AD300958AB4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3853E4242BF84AD300958AB4 /* SettingsView.swift */; };
@@ -33,6 +36,10 @@
 /* Begin PBXFileReference section */
 		3801EAB02BF9188100C204C2 /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
 		3801EAB62BF946F600C204C2 /* Calorie-Counter-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Calorie-Counter-Info.plist"; sourceTree = SOURCE_ROOT; };
+		384E8FE12C241A3D0011B397 /* ChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsView.swift; sourceTree = "<group>"; };
+		384E8FE32C24494E0011B397 /* PurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseView.swift; sourceTree = "<group>"; };
+		384E8FE52C24F6C30011B397 /* InAppPurchases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchases.swift; sourceTree = "<group>"; };
+		384E8FE72C24FBE30011B397 /* Jim's Calorie Counter.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Jim's Calorie Counter.storekit"; sourceTree = "<group>"; };
 		3853E41E2BF80FEE00958AB4 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		3853E4222BF8463B00958AB4 /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
 		3853E4242BF84AD300958AB4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -87,6 +94,7 @@
 		38C2ED542BF4680E00B2C7C8 /* Calorie Counter */ = {
 			isa = PBXGroup;
 			children = (
+				384E8FE72C24FBE30011B397 /* Jim's Calorie Counter.storekit */,
 				3801EAB62BF946F600C204C2 /* Calorie-Counter-Info.plist */,
 				38C2ED7C2BF7AEBA00B2C7C8 /* Screens */,
 				38C2ED7B2BF7AEAA00B2C7C8 /* Components */,
@@ -128,6 +136,7 @@
 				3853E42A2BF88E4B00958AB4 /* AI.swift */,
 				38F3589D2BFBBC3E006B2CF7 /* ImagePickerView.swift */,
 				3882D8622BFBF17B000E473D /* BarcodeScannerView.swift */,
+				384E8FE52C24F6C30011B397 /* InAppPurchases.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -142,6 +151,8 @@
 				3853E4282BF85CC800958AB4 /* AddView.swift */,
 				3801EAB02BF9188100C204C2 /* ProcessingView.swift */,
 				389B41662BFAD6E300354B0E /* MealView.swift */,
+				384E8FE12C241A3D0011B397 /* ChartsView.swift */,
+				384E8FE32C24494E0011B397 /* PurchaseView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -216,6 +227,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				384E8FE42C24494E0011B397 /* PurchaseView.swift in Sources */,
 				38C2ED722BF4815500B2C7C8 /* MacrosView.swift in Sources */,
 				38C2ED742BF494D900B2C7C8 /* MealCardView.swift in Sources */,
 				3853E4292BF85CC800958AB4 /* AddView.swift in Sources */,
@@ -223,8 +235,10 @@
 				389B41672BFAD6E300354B0E /* MealView.swift in Sources */,
 				3853E41F2BF80FEE00958AB4 /* Utilities.swift in Sources */,
 				38C2ED702BF4804800B2C7C8 /* MainTabView.swift in Sources */,
+				384E8FE22C241A3D0011B397 /* ChartsView.swift in Sources */,
 				38C2ED762BF4972E00B2C7C8 /* WelcomeView.swift in Sources */,
 				38C2ED682BF46C3E00B2C7C8 /* SummaryView.swift in Sources */,
+				384E8FE62C24F6C30011B397 /* InAppPurchases.swift in Sources */,
 				3853E4272BF85AC500958AB4 /* Miscellaneous.swift in Sources */,
 				38C2ED6C2BF4771600B2C7C8 /* LargeCardView.swift in Sources */,
 				3882D8632BFBF17B000E473D /* BarcodeScannerView.swift in Sources */,
@@ -367,7 +381,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Calorie Counter/Calorie Counter.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Calorie Counter/Preview Content\"";
 				DEVELOPMENT_TEAM = 534DZJT62R;
 				ENABLE_PREVIEWS = YES;
@@ -388,7 +402,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6.4;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "cx.jims.calorie-counter";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -408,7 +422,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Calorie Counter/Calorie Counter.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Calorie Counter/Preview Content\"";
 				DEVELOPMENT_TEAM = 534DZJT62R;
 				ENABLE_PREVIEWS = YES;
@@ -429,7 +443,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6.4;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "cx.jims.calorie-counter";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

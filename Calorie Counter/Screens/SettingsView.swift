@@ -10,6 +10,10 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct SettingsView: View {
+    @StateObject var iapManager = InAppPurchaseManager()
+    
+    @Binding var navigateToPurchase: Bool
+
     @State private var askForDescription: Bool = true
     @State private var mealsToShow: String = "3"
     @State private var mealReminders: Bool = false
@@ -28,13 +32,34 @@ struct SettingsView: View {
         return !editingGoal.isEmpty
     }
     
+    @State private var restoringPurchases: Bool = false
+
     @State private var editingOpenAIKey: Bool = false
     @State private var newOpenAIKey: String = ""
     @State private var openAIKey: String = ""
     
+    @State private var editingUserId: Bool = false
+    @State private var newUserId: String = ""
+    @State private var userId: String = ""
+
+    @State private var localTokensRemaining: Int = 0
+    
     @State private var editingImageCompression: Bool = false
     @State private var newImageCompression: String = "0.5"
     @State private var imageCompression: Double = 0.5
+    
+    @State private var lifetimePassOwned: Bool
+    
+    init(navigateToPurchase: Binding<Bool>) {
+        self._navigateToPurchase = navigateToPurchase
+        let purchasedProductIds = UserDefaults.standard.stringArray(forKey: "purchasedProductIds")
+        _lifetimePassOwned = State(initialValue: purchasedProductIds?.contains("com.logmeals.lifetimeaccess") ?? false)
+        iapManager.fetchProducts()
+        
+        let id = UserDefaults.standard.string(forKey: "userId") ?? ""
+                
+        _userId = State(initialValue: id)
+    }
     
     func editGoal(goal: String) {
         editingGoal = goal
@@ -44,49 +69,66 @@ struct SettingsView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-                    settingsSection(header: "Preferences") {
-                        
-                        settingsRow(title: "OpenAI API Key", value: openAIKey != "" ? "******" : "N/A", lastRow: false, gray: nil, danger: nil, onTap: {_ in
-                            editingOpenAIKey = true
-                        }, grayValue: openAIKey == "")
-                        .onAppear {
-                            openAIKey = UserDefaults.standard.string(forKey: "openAIAPIKey") ?? ""
-                        }
-                        settingsRow(title: "Image compression", value: imageCompression.description, lastRow: true, gray: nil, danger: nil, onTap: {_ in
-                            editingImageCompression = true
-                        }, grayValue: openAIKey == "")
-                        .onAppear {
-                            imageCompression = UserDefaults.standard.double(forKey: "imageCompression")
-                            // If zero
-                            if imageCompression == 0 {
-                                // Fix
-                                newImageCompression = "0.5"
-                                imageCompression = 0.5
-                                UserDefaults.standard.setValue(0.5, forKey: "imageCompression")
-                            } else {
-                                newImageCompression = imageCompression.description
+                    // TODO: Add "Tap to purchaes more tokens prompt"
+                    settingsSection(header: "Pro") {
+                        settingsRow(title: "Tokens remaining", subtitle: "Tap to buy more!", value: "\(formatNumberWithCommas(localTokensRemaining))", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
+                            // Purchase more tokens
+                            if let product = iapManager.availableProducts.first(where: { $0.productIdentifier == "com.logmeals.1000tokens" }) {
+                                // Purchase product
+                                iapManager.buyProduct(product: product)
+                                // TODO: Add listen for receipt like on PurchaseView
                             }
-                        }
-                        //settingsRow(title: "Ask for description on meal photos?", value: askForDescription ? "Yes" : "No", lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        //settingsRow(title: "Meals to show by default?", value: mealsToShow, lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        //settingsRow(title: "Meal reminders?", value: mealReminders ? "Enabled" : "Disabled", lastRow: nil, gray: nil, danger: nil, onTap: nil)
-                        //settingsRow(title: "Send anonymous usage data?", value: sendAnonymousData ? "Enabled" : "Disabled", lastRow: true, gray: nil, danger: nil, onTap: nil)
+                            }, grayValue: false)
+                            .onAppear {
+                                tokensRemaining { result in
+                                    switch result {
+                                    case .success(let tokens):
+                                        DispatchQueue.main.async {
+                                            localTokensRemaining = tokens
+                                        }
+                                    case .failure(let error):
+                                        // Handle error if needed, for now, we'll just print it
+                                        print("Failed to fetch tokens: \(error.localizedDescription)")
+                                    }
+                                }
+                            }
+    
                         
+                        if(!lifetimePassOwned) {
+                            settingsRow(title: "Purchase lifetime access", value: "", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
+                                // Navigate to paywall
+                                print("Navigate to paywall")
+                                navigateToPurchase = true
+                            }, grayValue: false
+                            )
+                        }
+                        
+                        settingsRow(title: "Restore purchases", value: "", lastRow: true, gray: nil, danger: nil, onTap: {_ in
+                                // TODO: Restore purchases
+                                var receipt = iapManager.getReceiptData()
+                                iapManager.sendReceiptToServer(receiptData: receipt!)
+                                // Notify user restore completed
+                                restoringPurchases.toggle()
+                            
+                                // Afterwards, re-load lifetimePassOwned
+                                let purchasedProductIds = UserDefaults.standard.stringArray(forKey: "purchasedProductIds")
+                                lifetimePassOwned = purchasedProductIds?.contains("com.logmeals.lifetimeaccess") ?? false
+                            
+                                // Afterwards, re-load tokens owned
+                                tokensRemaining { result in
+                                    switch result {
+                                    case .success(let tokens):
+                                        DispatchQueue.main.async {
+                                            localTokensRemaining = tokens
+                                        }
+                                    case .failure(let error):
+                                        // Handle error if needed, for now, we'll just print it
+                                        print("Failed to fetch tokens: \(error.localizedDescription)")
+                                    }
+                                }
+                            }, grayValue: false
+                        )
                     }
-                    
-                    /*
-                    settingsSection(header: "Favorites") {
-                        settingsRow(title: "Calories", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil, onTap: nil)
-                            /*.onDrag {
-                                return NSItemProvider()
-                            }*/
-                        settingsRow(title: "Weight", value: nil, imageName: "Bars", lastRow: nil, gray: true, danger: nil, onTap: nil)
-                            /*.onDrag {
-                                return NSItemProvider()
-                            }*/
-                        settingsRow(title: "Macros", value: nil, imageName: "Bars", lastRow: true, gray: true, danger: nil, onTap: nil)
-                    }
-                    */
                      
                     settingsSection(header: "Goals") {
                         settingsRow(title: "Calories", value: calorieGoal > 0 ? "\(formatNumberWithCommas(calorieGoal)) calories" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal, grayValue: calorieGoal == 0)
@@ -101,7 +143,7 @@ struct SettingsView: View {
                             .onAppear {
                                 carbohydratesGoal = UserDefaults.standard.integer(forKey: "carbohydratesGoal")
                             }
-                        settingsRow(title: "Fats", value: fatsGoal > 0 ? "\(fatsGoal)g" : "N/A", lastRow: nil, gray: nil, danger: nil, onTap: editGoal, grayValue: fatsGoal == 0)
+                        settingsRow(title: "Fats", value: fatsGoal > 0 ? "\(fatsGoal)g" : "N/A", lastRow: true, gray: nil, danger: nil, onTap: editGoal, grayValue: fatsGoal == 0)
                             .onAppear {
                                 fatsGoal = UserDefaults.standard.integer(forKey: "fatsGoal")
                             }
@@ -116,6 +158,75 @@ struct SettingsView: View {
                         // settingsRow(title: "Refer a friend, get $5!", imageName: "Gift", lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
                     
+                    settingsSection(header: "Technical") {
+                
+                        
+                        settingsRow(title: "OpenAI API Key", value: lifetimePassOwned ? (openAIKey != "" ? "******" : "N/A") : "N/A", imageName: lifetimePassOwned ? nil : "Lock", lastRow: false, gray: nil, danger: nil, onTap: {_ in
+                            if(lifetimePassOwned) {editingOpenAIKey = true}
+                        }, grayValue: openAIKey == "")
+                        .onAppear {
+                            openAIKey = UserDefaults.standard.string(forKey: "openAIAPIKey") ?? ""
+                        }
+                        
+                        settingsRow(title: "Send usage analytics", value: lifetimePassOwned ? "Disabled" : "Enabled", imageName: lifetimePassOwned ? nil : "Lock", lastRow: false, gray: nil, danger: nil, onTap: {_ in
+                        }, grayValue: openAIKey == "")
+                    
+                        settingsRow(title: "Image compression", value: imageCompression.description, lastRow: false, gray: nil, danger: nil, onTap: {_ in
+                            editingImageCompression = true
+                        }, grayValue: openAIKey == "")
+                        .onAppear {
+                            imageCompression = UserDefaults.standard.double(forKey: "imageCompression")
+                            // If zero
+                            if imageCompression == 0 {
+                                // Fix
+                                newImageCompression = "0.5"
+                                imageCompression = 0.5
+                                UserDefaults.standard.setValue(0.5, forKey: "imageCompression")
+                            } else {
+                                newImageCompression = imageCompression.description
+                            }
+                        }
+
+                        settingsRow(title: "User ID", value: "*****", lastRow: false, gray: false, danger: nil, onTap: {_ in
+                            // Edit User ID
+                            editingUserId = true
+                        }, grayValue: true)
+                        .onAppear {
+                            // Edit local UserID
+                            userId = UserDefaults.standard.string(forKey: "userId") ?? ""
+                            
+                            if(userId.isEmpty) {
+                                // Create userId by making a POST request to 'https://api.jims.cx/create-user-id'
+                                createUserAndFetchId { result in
+                                    switch result {
+                                    case .success(let newUserId):
+                                        // Store userId in UserDefaults
+                                        UserDefaults.standard.set(newUserId, forKey: "userId")
+                                        userId = newUserId
+                                        // Refetch token count
+                                        tokensRemaining { result in
+                                            switch result {
+                                            case .success(let tokens):
+                                                DispatchQueue.main.async {
+                                                    localTokensRemaining = tokens
+                                                }
+                                            case .failure(let error):
+                                                // Handle error if needed, for now, we'll just print it
+                                                print("Failed to fetch tokens: \(error.localizedDescription)")
+                                            }
+                                        }
+                                    case .failure(let error):
+                                        print("Failed to create new userId")
+                                    }
+                                }
+                            }
+                        }
+                        //settingsRow(title: "Ask for description on meal photos?", value: askForDescription ? "Yes" : "No", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        //settingsRow(title: "Meals to show by default?", value: mealsToShow, lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        //settingsRow(title: "Meal reminders?", value: mealReminders ? "Enabled" : "Disabled", lastRow: nil, gray: nil, danger: nil, onTap: nil)
+                        //settingsRow(title: "Send anonymous usage data?", value: sendAnonymousData ? "Enabled" : "Disabled", lastRow: true, gray: nil, danger: nil, onTap: nil)
+                        
+                    }
                     
                     /*
                     settingsSection(header: "Support") {
@@ -171,6 +282,24 @@ struct SettingsView: View {
             } message: {
                 Text("Enter your new goal:")
             }
+            .alert("Edit User ID", isPresented: $editingUserId) {
+                TextField("ex: 49fd....", text: $newUserId)
+                Button("Save", action: {
+                    let desiredUserId = $newUserId.wrappedValue
+                    if desiredUserId != "" {
+                        // Save new API Key
+                        UserDefaults.standard.set(desiredUserId, forKey: "userId")
+                        userId = desiredUserId
+                        newUserId = ""
+                    }
+                })
+                Button("Cancel", action: {
+                    editingUserId = false
+                    newUserId = ""
+                })
+            } message: {
+                Text("Don't share this or edit it unless instructed to by Jim!")
+            }
             .alert("Edit OpenAI API Key", isPresented: $editingOpenAIKey) {
                 TextField("ex: sk....", text: $newOpenAIKey)
                 Button("Save", action: {
@@ -220,6 +349,34 @@ struct SettingsView: View {
             } message: {
                 Text("1 = Highest Quality / No compression, .1 = Lowest Quality")
             }
+            .alert("Purchases restored", isPresented: $restoringPurchases) {
+                Button("Close", action: {
+                    restoringPurchases.toggle()
+                })
+            } message: {
+                Text("Purchases restored successfully. You may need to close and re-open your app to for updates to appear.")
+            }
+            
+            .onChange(of: iapManager.receiptData) { newReceiptData in
+                if let receiptData = newReceiptData {
+                    iapManager.sendReceiptToServer(receiptData: receiptData)
+                    // Mark purchase as completed
+                    print("Purchase completed:")
+                    // Refetch token count
+                    tokensRemaining { result in
+                        switch result {
+                        case .success(let tokens):
+                            DispatchQueue.main.async {
+                                localTokensRemaining = tokens
+                            }
+                        case .failure(let error):
+                            // Handle error if needed, for now, we'll just print it
+                            print("Failed to fetch tokens: \(error.localizedDescription)")
+                        }
+                    }
+                    // TODO: Add thank you screen + token stacking animation +1,000
+                }
+            }
             .background(Color(UIColor.systemGray6))
             .navigationTitle("Settings")
         }
@@ -227,6 +384,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    return MainTabView(selection: "Settings")
-        .modelContainer(for: [Weight.self, Meal.self], inMemory: true)
+    return SettingsView(navigateToPurchase: .constant(false))
 }
