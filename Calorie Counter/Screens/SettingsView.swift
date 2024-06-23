@@ -12,7 +12,8 @@ import UniformTypeIdentifiers
 struct SettingsView: View {
     @StateObject var iapManager = InAppPurchaseManager()
     
-    @Binding var navigateToPurchase: Bool
+    @Binding var showPaywall: Bool
+    @Binding private var appIsOwned: Bool
 
     @State private var askForDescription: Bool = true
     @State private var mealsToShow: String = "3"
@@ -48,12 +49,9 @@ struct SettingsView: View {
     @State private var newImageCompression: String = "0.5"
     @State private var imageCompression: Double = 0.5
     
-    @State private var lifetimePassOwned: Bool
-    
-    init(navigateToPurchase: Binding<Bool>) {
-        self._navigateToPurchase = navigateToPurchase
-        let purchasedProductIds = UserDefaults.standard.stringArray(forKey: "purchasedProductIds")
-        _lifetimePassOwned = State(initialValue: purchasedProductIds?.contains("com.logmeals.lifetimeaccess") ?? false)
+    init(showPaywall: Binding<Bool>, appIsOwned: Binding<Bool>) {
+        self._showPaywall = showPaywall
+        self._appIsOwned = appIsOwned
         iapManager.fetchProducts()
         
         let id = UserDefaults.standard.string(forKey: "userId") ?? ""
@@ -71,7 +69,9 @@ struct SettingsView: View {
                 VStack(spacing: 20) {
                     // TODO: Add "Tap to purchaes more tokens prompt"
                     settingsSection(header: "Pro") {
-                        settingsRow(title: "Tokens remaining", subtitle: "Tap to buy more!", value: "\(formatNumberWithCommas(localTokensRemaining))", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
+                        settingsRow(title: "Tokens remaining", subtitle: appIsOwned ? "Tap to buy more!" : nil, value: "\(formatNumberWithCommas(localTokensRemaining))", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
+                            // Disable buying more tokens until lifetime pass is owned.
+                            if(!appIsOwned) { return }
                             // Purchase more tokens
                             if let product = iapManager.availableProducts.first(where: { $0.productIdentifier == "com.logmeals.1000tokens" }) {
                                 // Purchase product
@@ -94,11 +94,11 @@ struct SettingsView: View {
                             }
     
                         
-                        if(!lifetimePassOwned) {
+                        if(!appIsOwned) {
                             settingsRow(title: "Purchase lifetime access", value: "", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
                                 // Navigate to paywall
                                 print("Navigate to paywall")
-                                navigateToPurchase = true
+                                showPaywall = true
                             }, grayValue: false
                             )
                         }
@@ -110,9 +110,9 @@ struct SettingsView: View {
                                 // Notify user restore completed
                                 restoringPurchases.toggle()
                             
-                                // Afterwards, re-load lifetimePassOwned
+                                // Afterwards, re-load appIsOwned
                                 let purchasedProductIds = UserDefaults.standard.stringArray(forKey: "purchasedProductIds")
-                                lifetimePassOwned = purchasedProductIds?.contains("com.logmeals.lifetimeaccess") ?? false
+                                appIsOwned = purchasedProductIds?.contains("com.logmeals.lifetimeaccess") ?? false
                             
                                 // Afterwards, re-load tokens owned
                                 tokensRemaining { result in
@@ -161,14 +161,14 @@ struct SettingsView: View {
                     settingsSection(header: "Technical") {
                 
                         
-                        settingsRow(title: "OpenAI API Key", value: lifetimePassOwned ? (openAIKey != "" ? "******" : "N/A") : "N/A", imageName: lifetimePassOwned ? nil : "Lock", lastRow: false, gray: nil, danger: nil, onTap: {_ in
-                            if(lifetimePassOwned) {editingOpenAIKey = true}
+                        settingsRow(title: "OpenAI API Key", value: appIsOwned ? (openAIKey != "" ? "******" : "N/A") : "N/A", imageName: appIsOwned ? nil : "Lock", lastRow: false, gray: nil, danger: nil, onTap: {_ in
+                            if(appIsOwned) {editingOpenAIKey = true}
                         }, grayValue: openAIKey == "")
                         .onAppear {
                             openAIKey = UserDefaults.standard.string(forKey: "openAIAPIKey") ?? ""
                         }
                         
-                        settingsRow(title: "Send usage analytics", value: lifetimePassOwned ? "Disabled" : "Enabled", imageName: lifetimePassOwned ? nil : "Lock", lastRow: false, gray: nil, danger: nil, onTap: {_ in
+                        settingsRow(title: "Send usage analytics", value: appIsOwned ? "Disabled" : "Enabled", imageName: appIsOwned ? nil : "Lock", lastRow: false, gray: nil, danger: nil, onTap: {_ in
                         }, grayValue: openAIKey == "")
                     
                         settingsRow(title: "Image compression", value: imageCompression.description, lastRow: false, gray: nil, danger: nil, onTap: {_ in
@@ -384,5 +384,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    return SettingsView(navigateToPurchase: .constant(false))
+    return SettingsView(showPaywall: .constant(false), appIsOwned: .constant(false))
 }

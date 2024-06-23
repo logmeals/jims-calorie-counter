@@ -107,7 +107,7 @@ class InAppPurchaseManager: NSObject, ObservableObject, SKProductsRequestDelegat
     }
 
     func sendReceiptToServer(receiptData: Data) {
-        guard let url = URL(string: "http://192.168.5.116:3001/validate-purchase") else {
+        guard let url = URL(string: "http://api.jims.cx/validate-purchase") else {
             print("Error: Bad URL")
             return
         }

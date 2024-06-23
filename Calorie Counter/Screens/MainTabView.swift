@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @State private var appIsOwned: Bool
+    @State private var showPaywall: Bool
     @State private var showWelcomeScreen: Bool
     @State private var selection: String
     @State private var navigateToProcessing: Bool = false
@@ -25,6 +27,11 @@ struct MainTabView: View {
         _showWelcomeScreen = State(initialValue: !hasShownWelcomeScreen)
         _selection = State(initialValue: selection ?? "Summary")
         mealId = UUID()
+        // SET SHOW PAYWALL BASED ON IF USER OWNS LIFETIME PASS AND TOKEN AMOUNT
+        let purchasedProductIds = UserDefaults.standard.stringArray(forKey: "purchasedProductIds")
+        let hasLifetimeAccess = purchasedProductIds?.contains("com.logmeals.lifetimeaccess") ?? false || purchasedProductIds?.contains("com.logmeals.ogpurchase") ?? false
+        _showPaywall = State(initialValue: !hasLifetimeAccess)
+        _appIsOwned = State(initialValue: hasLifetimeAccess)
     }
 
     var body: some View {
@@ -59,21 +66,13 @@ struct MainTabView: View {
                  */
             }
             NavigationLink(
-                destination: SettingsView(navigateToPurchase: $navigateToPurchase),
+                destination: SettingsView(showPaywall: $showPaywall, appIsOwned: $appIsOwned),
                 isActive: $navigateToSettings,
                 label: {
                     EmptyView()
                 }
             ).hidden()
-            
-            NavigationLink(
-                destination: PurchaseView(),
-                isActive: $navigateToPurchase,
-                label: {
-                    EmptyView()
-                }
-            )
-            
+        
             NavigationLink(
                 destination: ProcessingView(barcode: $barcode, mealDescription: $mealDescription, imageData: $imageData) {
                     selection = "Summary"
@@ -98,6 +97,9 @@ struct MainTabView: View {
         }
         .sheet(isPresented: $showWelcomeScreen) {
             WelcomeView(showWelcomeScreen: $showWelcomeScreen)
+        }
+        .sheet(isPresented: $showPaywall) {
+            PurchaseView(showPaywall: $showPaywall, appIsOwned: $appIsOwned)
         }
     }
 }

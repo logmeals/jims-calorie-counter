@@ -24,6 +24,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let uiImage = info[.originalImage] as? UIImage {
                 parent.image = uiImage
+                // TODO: Make compression quality customizable
                 parent.imageData = uiImage.jpegData(compressionQuality: 0.8)
             }
             picker.dismiss(animated: true)

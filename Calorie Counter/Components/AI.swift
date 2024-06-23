@@ -279,8 +279,22 @@ private func callEstimateAPI(userId: String, mealDescription: String?, imageData
         requestBody["details"] = mealDescription
     }
 
-    if let imageData = imageData {
-        requestBody["imageBase64"] = imageData.base64EncodedString()
+    // Compress image before uploading
+    if let imageData = imageData, let image = UIImage(data: imageData) {
+        var compressionQuality = UserDefaults.standard.double(forKey: "imageCompression")
+        
+        if compressionQuality > 1 {
+            compressionQuality = 1
+        }
+        if compressionQuality == 0 {
+            compressionQuality = 0.1
+        }
+        if let base64Image = compressAndEncodeImage(image, compressionQuality: compressionQuality) {
+            requestBody["imageBase64"] = base64Image
+        } else {
+            // Upload raw image if compression fails
+            requestBody["imageBase64"] = imageData.base64EncodedString()
+        }
     }
 
     do {

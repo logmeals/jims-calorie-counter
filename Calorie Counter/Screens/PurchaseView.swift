@@ -7,124 +7,136 @@
 
 import SwiftUI
 
-import SwiftUI
-
-extension UIColor {
-    static let scaleBlue = UIColor(red: 235/255, green: 245/255, blue: 255/255, alpha: 1.0)
-}
-
-extension Color {
-    static let scaleBlue = Color(UIColor.scaleBlue)
-}
-
 struct Feature: View {
     var title: String
     var details: String
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top, spacing: 15) {
             Text("✅")
                 .font(.footnote)
                 .foregroundColor(.gray)
                 .frame(width:20, height: 28, alignment: .top)
+                .padding(.top, 5)
                 .padding(.bottom, 10)
-            VStack {
+            VStack(spacing:5) {
                 Text(title)
+                    .font(.title3)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text(details)
-                    .font(.footnote)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                
             }
         }
     }
 }
 
+func Testimonial(quote: String) -> some View {
+        VStack(spacing: 8) {
+            Text("“\(quote)”")
+                .italic()
+                .padding(.horizontal)
+                .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                .multilineTextAlignment(.center)
+            
+            Text("Another satisfied, paying customer.")
+                .font(.footnote)
+                .foregroundColor(.gray)
+        }
+        .frame(width: UIScreen.main.bounds.width - 150)
+        .padding(15)
+        .background(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .shadow(color: .black.opacity(0.1), radius: 5)
+        .rotationEffect(.degrees(0.5))
+    
+}
+
 struct PurchaseView: View {
     @StateObject var iapManager = InAppPurchaseManager()
     
-    @State private var purchaseCompleted: Bool
+    @Binding var showPaywall: Bool
+    @Binding var appIsOwned: Bool
+    
+    @State private var localTokensRemaining: Int = 0
 
-    init() {
-        let purchasedProductIds = UserDefaults.standard.stringArray(forKey: "purchasedProductIds")
-        _purchaseCompleted = State(initialValue: purchasedProductIds?.contains("com.logmeals.lifetimeaccess") ?? false)
+
+    init(showPaywall: Binding<Bool>, appIsOwned: Binding<Bool>) {
+        self._showPaywall = showPaywall
+        self._appIsOwned = appIsOwned
+        iapManager.fetchProducts()
     }
     
     var body: some View {
-        VStack(spacing:0) {
-            Spacer()
-            Image("Weight")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 15)
-                .padding(.bottom, -15)
-        
-            VStack(spacing: 0) {
-                
-                // Information text
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Easily track your diet. No ads or subscriptions.")
+        VStack(spacing:10) {
+                VStack(spacing:0) {
+                    Text(localTokensRemaining > 0 ? "Your free trial will end soon." : "Your free trial has ended")
                         .font(.title)
                         .fontWeight(.bold)
                         .multilineTextAlignment(.center)
                         .padding(.bottom, 10)
-                        .padding(.top, 20)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                    
-                    Feature(title: "VIP Text, Call, and Facetime support", details: "Get Jim’s cell phone number, who lost over 125lbs")
-                    Feature(title: "Private and Unlimited", details: "Disable usage analytics + add OpenAI API Key")
-                    Feature(title: "No API Key? 1,000 tokens included", details: "Estimated ~3 months supply")
+                    .padding(.top, 20)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 
-                }
-                .padding(.horizontal)
-                
-                Spacer()
-                
-                // Customer review
-                // TODO: To sliding testimonials
-                HStack {
-                    VStack(spacing: 8) {
-                        Text("“This app is incredible. I love how much it feels like Apple. And no ads!!!”")
-                            .italic()
-                            .padding(.horizontal)
-                            .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                            .multilineTextAlignment(.center)
-                        
-                        Text("Another satisfied, paying customer.")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
+                    HStack (alignment: .center, spacing: 0) {
+                        Text("You have ")
+                            .foregroundColor(.black.opacity(0.65))
+                        Text("\(localTokensRemaining)/100")
+                            .fontWeight(.semibold)
+                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                        Text(" tokens remaining!")
+                            .foregroundColor(.black.opacity(0.65))
                     }
-                    .padding(10)
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .shadow(color: .black.opacity(0.1), radius: 5)
-                    .rotationEffect(.degrees(0.5))
-                }.padding(20)
+                        .onAppear {
+                            tokensRemaining { result in
+                                switch result {
+                                case .success(let tokens):
+                                    DispatchQueue.main.async {
+                                        localTokensRemaining = tokens
+                                    }
+                                case .failure(let error):
+                                    // Handle error if needed, for now, we'll just print it
+                                    print("Failed to fetch tokens: \(error.localizedDescription)")
+                                }
+                            }
+                        }
+                }
+            
+            Spacer()
+            
+            VStack(spacing:20) {
+                Feature(title: "Access to all features", details: "Disable usage analytics + add an OpenAI key")
+                Feature(title: "Guaranteed lifetime access", details: "No ads or monthly subscriptions ever.")
+                Feature(title: "1,000 free tokens for Months of AI", details: "Don’t have an OpenAI Key? Use the 1,000 included tokens instead. Enough for 250 meals. More available for $3.99/1,000.")
+                Feature(title: "1:1 VIP Support", details: "Get Jim’s cell phone number, who lost over 125lbs. Facetime, text, or call whenever.")
+            }
+                .padding(10)
+            
+            Spacer()
+            // Sliding testimonials
+            ScrollView(.horizontal) {
+                HStack (alignment: .top, spacing:20) {
+                    Testimonial(quote: "Just logged my first meal this morning, holy s**t this is good.")
+                    Testimonial(quote: "This app is amazing so real to switch over to this away from Lose It.")
+                    Testimonial(quote: "Really love how clean the app is :) ...the design feels like iOS")
+                }.padding(10)
+            }
+            
                 Spacer()
                 
                 // Purchase button
-                if let product = iapManager.availableProducts.first(where: { $0.productIdentifier == "com.logmeals.lifetimeaccess" }) {
+                if let product = iapManager.availableProducts.first(where: { $0.productIdentifier == "com.logmeals.lifetimeaccess" || $0.productIdentifier == "com.logmeals.ogpurchase" }) {
                     Button(action: {
-                        if(!purchaseCompleted) {iapManager.buyProduct(product: product)}
+                        iapManager.buyProduct(product: product)
                     }) {
 
                         HStack (spacing: 10) {
-                            if(purchaseCompleted) {
-                                Text("Purchase completed")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 20, weight: .semibold))
-                                Text("-")
-                                    .foregroundColor(.white.opacity(0.5))
-                                    .font(.system(size: 20, weight: .semibold))
-                                Text("Enjoy!")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 20, weight: .semibold))
-                            } else {
-                                Text("Buy Lifetime Access")
+                                Text("Purchase life-time access")
                                     .foregroundColor(.white)
                                     .font(.system(size: 20, weight: .semibold))
                                 
@@ -132,45 +144,33 @@ struct PurchaseView: View {
                                     .foregroundColor(.white.opacity(0.5))
                                     .font(.system(size: 20, weight: .semibold))
                                 
-                                Text("\(product.price)")
+                                Text("\(formattedPrice(for: product))")
                                     .foregroundColor(.white.opacity(0.75))
                                     .font(.system(size: 20, weight: .semibold))
-                            }
                         }
                         .padding(20)
                     }
                     .frame(maxWidth: .infinity)
-                    .background(!purchaseCompleted ? .blue : .green)
+                    .background(.blue)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding(10)
                 } else {
                     Text("Loading...")
                         .padding()
                 }
-                
-                
-                // Restore purchase button
-                Button(action: {
-                    // Action to restore purchase
-                    
-                }) {
-                    Text("Already purchased? Tap here to restore")
-                        .font(.footnote)
-                        .foregroundColor(.blue)
-                        .padding()
-                }
-            }
-            .background(Color.scaleBlue.ignoresSafeArea())
+
         }
-        .background(.black.gradient)
+        .background(.white)
+        .padding(10)
         .onChange(of: iapManager.receiptData) { newReceiptData in
             if let receiptData = newReceiptData {
                 iapManager.sendReceiptToServer(receiptData: receiptData)
                 // Mark purchase as completed
                 print("Purchase completed:")
-                purchaseCompleted = true
-                // TODO: Navigate back to summary
-                // navigateBackToSummary()
+                // Set app as owned
+                appIsOwned = true
+                // Close sheet / Navigate back
+                showPaywall = false
                 // TODO: Add thank you screen + token stacking animation +1,000
             }
         }
@@ -178,5 +178,5 @@ struct PurchaseView: View {
 }
 
 #Preview {
-    PurchaseView()
+    PurchaseView(showPaywall: .constant(false), appIsOwned: .constant(false))
 }

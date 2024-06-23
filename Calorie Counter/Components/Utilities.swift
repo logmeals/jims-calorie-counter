@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import StoreKit
 
 extension Date {
     func isSameDay(as otherDate: Date) -> Bool {
@@ -83,3 +84,11 @@ func formatTimestamp(date: Date) -> String {
     
     return formatter.string(from: date)
 }
+
+
+ func formattedPrice(for product: SKProduct) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = product.priceLocale
+        return formatter.string(from: product.price) ?? "\(product.price)"
+    }
