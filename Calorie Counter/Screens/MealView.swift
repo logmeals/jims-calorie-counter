@@ -220,6 +220,11 @@ struct MealView: View {
                 Button(action: {
                     if meal != nil {
                         context.delete(meal!)
+                        do {
+                            try context.save()
+                        } catch {
+                            print("Error: Saving deleted meal")
+                        }
                         dismiss()
                         onDismiss()
                     }
