@@ -95,9 +95,10 @@ struct MainTabView: View {
             )
             .hidden()
         }
+        /*
         .sheet(isPresented: $showWelcomeScreen) {
             WelcomeView(showWelcomeScreen: $showWelcomeScreen)
-        }
+        }*/
         .sheet(isPresented: $showPaywall) {
             PurchaseView(showPaywall: $showPaywall, appIsOwned: $appIsOwned)
         }
