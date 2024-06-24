@@ -69,14 +69,18 @@ struct SettingsView: View {
                 VStack(spacing: 20) {
                     // TODO: Add "Tap to purchaes more tokens prompt"
                     settingsSection(header: "Pro") {
-                        settingsRow(title: "Tokens remaining", subtitle: appIsOwned ? "Tap to buy more!" : nil, value: "\(formatNumberWithCommas(localTokensRemaining))", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
+                        settingsRow(title: "Tokens remaining", subtitle: appIsOwned ? "Tap to buy more!" : "Purchase lifetime access for more!", value: "\(formatNumberWithCommas(localTokensRemaining))", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
                             // Disable buying more tokens until lifetime pass is owned.
-                            if(!appIsOwned) { return }
-                            // Purchase more tokens
-                            if let product = iapManager.availableProducts.first(where: { $0.productIdentifier == "com.logmeals.1000tokens" }) {
-                                // Purchase product
-                                iapManager.buyProduct(product: product)
-                                // TODO: Add listen for receipt like on PurchaseView
+                            if(!appIsOwned) {
+                                // Show lifetime access paywall
+                                showPaywall = true
+                            } else {
+                                // Purchase more tokens
+                                if let product = iapManager.availableProducts.first(where: { $0.productIdentifier == "com.logmeals.1000tokens" }) {
+                                    // Purchase product
+                                    iapManager.buyProduct(product: product)
+                                    // TODO: Add listen for receipt like on PurchaseView
+                                }
                             }
                             }, grayValue: false)
                             .onAppear {
@@ -94,14 +98,14 @@ struct SettingsView: View {
                             }
     
                         
-                        if(!appIsOwned) {
-                            settingsRow(title: "Purchase lifetime access", value: "", lastRow: nil, gray: nil, danger: nil, onTap: {_ in
+                        
+                        settingsRow(title: "Purchase lifetime access", value: appIsOwned ? "You've purchased this already" : nil, lastRow: nil, gray: appIsOwned, danger: nil, onTap: {_ in
                                 // Navigate to paywall
                                 print("Navigate to paywall")
-                                showPaywall = true
+                                if(!appIsOwned) { showPaywall = true }
                             }, grayValue: false
-                            )
-                        }
+                        )
+                        
                         
                         settingsRow(title: "Restore purchases", value: "", lastRow: true, gray: nil, danger: nil, onTap: {_ in
                                 // TODO: Restore purchases
