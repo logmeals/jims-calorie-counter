@@ -18,22 +18,47 @@ struct WelcomeView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 185, height: 185)
-                .clipShape(RoundedRectangle(cornerRadius:10))
-                .shadow(color: Color(UIColor.systemGray2), radius: 15)
+                .clipShape(RoundedRectangle(cornerRadius:24))
+                .shadow(color: Color(UIColor.systemGray2), radius: 20)
+                .padding(.bottom, 20)
             
-            Text("Welcome to Jim's Calorie Counter")
-                .font(.title)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-                .padding(.vertical, 20)
+            VStack (spacing: 10) {
             
-            Text("Inspired by my personal weight loss journey, this app helps you track your nutrition quickly and securely, on-device.\n\nYou can add meals with a photo, description, or barcode. See nutrition summaries for any given day. Set goals, and track your weight.")
-                .font(.body)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-                .padding(.bottom, 40)
-                .foregroundColor(Color(UIColor.systemGray))
+                    Text("Welcome!")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                    
+                    Text("About your free trial")
+                        .font(.title2)
+                        .fontWeight(.medium)
+                        .opacity(0.55)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, 10)
+                
+                Text("You’ll get 100 tokens, enough to add 25 meals with AI. Scanning barcodes or adding macros does not take tokens.")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(UIColor.systemGray))
+                
+                Text("At any given time, you can upgrade from settings to unlock all features.")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(UIColor.systemGray))
+                
+                Text("If you have questions, join our Discord and send me a message for support!")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(UIColor.systemGray))
+                
+                Text("- Jim Bisenius, Founder")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(UIColor.systemGray))
+                
+            }.padding(.horizontal)
+            
+            Spacer()
             
             Button(action: {
                 // Set the flag to true and dismiss the welcome screen

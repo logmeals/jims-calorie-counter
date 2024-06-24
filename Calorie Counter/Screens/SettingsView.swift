@@ -151,10 +151,16 @@ struct SettingsView: View {
                     }
                     
                     settingsSection(header: "Community") {
-                        settingsRow(title: "Join our Discord Community", imageName: "Discord", lastRow: true, gray: nil, danger: nil, onTap: {_ in
+                        settingsRow(title: "Join our Discord Community", imageName: "Discord", lastRow: false, gray: nil, danger: nil, onTap: {_ in
                                 // TODO: Redirect to join Discord Link
                             UIApplication.shared.open(URL(string: "https://discord.gg/TT8W6DfXHe")!)
                         }, grayValue: false)
+                        
+                        settingsRow(title: "Support", value: appIsOwned ? "984-269-8841" : "Discord", lastRow: true, gray: false, danger: false, onTap: {
+                            _ in
+                            // Do nothing
+                        }, grayValue: true)
+                        
                         // settingsRow(title: "Refer a friend, get $5!", imageName: "Gift", lastRow: true, gray: nil, danger: nil, onTap: nil)
                     }
                     
@@ -171,6 +177,7 @@ struct SettingsView: View {
                         settingsRow(title: "Send usage analytics", value: appIsOwned ? "Disabled" : "Enabled", imageName: appIsOwned ? nil : "Lock", lastRow: false, gray: nil, danger: nil, onTap: {_ in
                         }, grayValue: openAIKey == "")
                     
+                        /*
                         settingsRow(title: "Image compression", value: imageCompression.description, lastRow: false, gray: nil, danger: nil, onTap: {_ in
                             editingImageCompression = true
                         }, grayValue: openAIKey == "")
@@ -186,8 +193,9 @@ struct SettingsView: View {
                                 newImageCompression = imageCompression.description
                             }
                         }
-
-                        settingsRow(title: "User ID", value: "*****", lastRow: false, gray: false, danger: nil, onTap: {_ in
+                        */
+                        
+                        settingsRow(title: "Edit User ID", value: "*****", lastRow: false, gray: false, danger: nil, onTap: {_ in
                             // Edit User ID
                             editingUserId = true
                         }, grayValue: true)
@@ -221,6 +229,8 @@ struct SettingsView: View {
                                 }
                             }
                         }
+                        
+                        
                         //settingsRow(title: "Ask for description on meal photos?", value: askForDescription ? "Yes" : "No", lastRow: nil, gray: nil, danger: nil, onTap: nil)
                         //settingsRow(title: "Meals to show by default?", value: mealsToShow, lastRow: nil, gray: nil, danger: nil, onTap: nil)
                         //settingsRow(title: "Meal reminders?", value: mealReminders ? "Enabled" : "Disabled", lastRow: nil, gray: nil, danger: nil, onTap: nil)

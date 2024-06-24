@@ -107,15 +107,19 @@ struct PurchaseView: View {
                         }
                 }
             
-            Spacer()
-            
-            VStack(spacing:20) {
-                Feature(title: "Access to all features", details: "Disable usage analytics + add an OpenAI key")
-                Feature(title: "Guaranteed lifetime access", details: "No ads or monthly subscriptions ever.")
-                Feature(title: "1,000 free tokens for Months of AI", details: "Don’t have an OpenAI Key? Use the 1,000 included tokens instead. Enough for 250 meals. More available for $3.99/1,000.")
-                Feature(title: "1:1 VIP Support", details: "Get Jim’s cell phone number, who lost over 125lbs. Facetime, text, or call whenever.")
-            }
+            VStack(spacing: 5) {
+                Text("UPGRADE NOW AND RECEIVE:")
+                    .font(.caption)
+                    .foregroundColor(.black.opacity(0.45))
+                    .fontWeight(.medium)
+                VStack(spacing:20) {
+                    Feature(title: "Access to all features", details: "Disable usage analytics + add an OpenAI key")
+                    Feature(title: "Guaranteed lifetime access", details: "No ads or monthly subscriptions ever.")
+                    Feature(title: "1,000 free tokens for Months of AI", details: "Don’t have an OpenAI Key? Use the 1,000 included tokens instead. Enough for 250 meals. More available for $3.99/1,000.")
+                    Feature(title: "1:1 VIP Support", details: "Get Jim’s cell phone number, who lost over 125lbs. Facetime, text, or call whenever.")
+                }
                 .padding(10)
+            }
             
             Spacer()
             // Sliding testimonials

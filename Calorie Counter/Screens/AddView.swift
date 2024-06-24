@@ -26,6 +26,10 @@ struct AddView: View {
     @Binding var mealDescription: String
     @Binding var imageData: Data?
     
+    @Binding var appIsOwned: Bool
+    
+    @State private var localTokensRemaining: Int?
+    
     // Meal details update prompt
     @State private var editingValue: String = ""
     @State private var editingMeal: Bool = false
@@ -79,7 +83,7 @@ struct AddView: View {
                                 RoundedRectangle(cornerRadius: 12)
                                     .stroke(Color.blue, lineWidth: 4)
                             )
-                        } else if(selectedTab == "AI") {
+                        } else if(selectedTab == "AI" && localTokensRemaining ?? 0 >= 4) {
                             VStack(spacing:20) {
                                 VStack(alignment: .center, spacing: 10) {
                                     if let imageData = imageData, let uiImage = UIImage(data: imageData) {
@@ -275,48 +279,32 @@ struct AddView: View {
                                     .background(.blue)
                                     .cornerRadius(10)
                             }
+                        } else {
+                            // Show not enough token warning
+                            VStack(spacing: 10) {
+                                Text("Not enough tokens")
+                                    .font(.title)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.black)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .multilineTextAlignment(.center)
+                                Text("You have \(localTokensRemaining ?? 0) / 4 tokens needed.")
+                                    .font(.title3)
+                                    .fontWeight(.medium)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.gray)
+                                Text("Purchase \(appIsOwned ? "more tokens" : "a lifetime pass") in settings \(appIsOwned ? "or add an OpenAI Key " : "")to continue adding meals with AI.")
+                                    .font(.title3)
+                                    .fontWeight(.medium)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.gray)
+                            }.padding(10)
                         }
                     }
                     .frame(maxHeight: .infinity)
-                    
-                    /*
-                     settingsSection(header: "Meal") {
-                        settingsRow(title: "Take a photo of your meal", value: nil, imageName: "Camera", lastRow: nil, gray: false, danger: nil, onTap: {_ in
-                                sourceType = .camera
-                                showingImagePicker.toggle()
-                        }, grayValue: false)
-                        settingsRow(title: "Select meal photo from camera roll", imageName: "Photo", lastRow: nil, gray: false, danger: nil, onTap: {_ in
-                                // Activate camera roll
-                                sourceType = .photoLibrary
-                                showingImagePicker.toggle()
-                        }, grayValue: false)
-                        settingsRow(title: "Describe your meal", imageName: "Chat", lastRow: false, gray: false, danger: nil, onTap: {_ in
-                                showingDescribeMealAlert.toggle()
-                            }, grayValue: false
-                        ).onAppear {
-                            openAIAPIKey = UserDefaults.standard.string(forKey: "openAIAPIKey") ?? ""
-                        }
-                                .alert("Describe your meal", isPresented: $showingDescribeMealAlert) {
-                                    TextField("ex: A 12ct chicken nugget meal from Chickfila", text: $mealDescription)
-                                    Button("Cancel", action: {
-                                        showingDescribeMealAlert.toggle()
-                                    })
-                                    Button("Save meal", action: {
-                                        let desiredMealDescription = $mealDescription.wrappedValue
-                                        if desiredMealDescription != "" {
-                                            navigateToProcessing = true
-                                        }
-                                    })
-                                } message: {
-                                    Text("Enter as much information as you can. ex: What and how much you ate, from where, modifications, etc")
-                                }
-                        
-                        settingsRow(title: "Scan barcode", imageName: "Barcode", lastRow: true, gray: nil, danger: nil, onTap: {_ in
-                            showingBarcodeScanner.toggle()
-                        }, grayValue: false)
-                    }
-                     */
-                    }
+                }
                 .padding()
             }
             .background(Color(UIColor.systemGray6))
@@ -324,6 +312,16 @@ struct AddView: View {
             .onAppear {
                 // Create new meal
                 meal = Meal(emoji: "", createdAt: Date(), label: "", details: "", reviewedAt: Date(), calories: 0, protein: 0, carbohydrates: 0, fats: 0, photo: nil)
+                // Set tokens remaining
+                tokensRemaining { result in
+                    switch result {
+                    case .success(let tokens):
+                        localTokensRemaining = tokens
+                    case .failure(let error):
+                        // Handle error if needed, for now, we'll just print it
+                        print("Failed to fetch tokens: \(error.localizedDescription)")
+                    }
+                }
             }
             .contentShape(Rectangle()) // Ensure the gesture recognizer is aware of the full area
                 .gesture(

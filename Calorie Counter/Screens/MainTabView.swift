@@ -30,7 +30,7 @@ struct MainTabView: View {
         // SET SHOW PAYWALL BASED ON IF USER OWNS LIFETIME PASS AND TOKEN AMOUNT
         let purchasedProductIds = UserDefaults.standard.stringArray(forKey: "purchasedProductIds")
         let hasLifetimeAccess = purchasedProductIds?.contains("com.logmeals.lifetimeaccess") ?? false || purchasedProductIds?.contains("com.logmeals.ogpurchase") ?? false
-        _showPaywall = State(initialValue: !hasLifetimeAccess)
+        _showPaywall = State(initialValue: !hasLifetimeAccess && hasShownWelcomeScreen)
         _appIsOwned = State(initialValue: hasLifetimeAccess)
     }
 
@@ -43,7 +43,7 @@ struct MainTabView: View {
                         Text("Summary")
                     }.tag("Summary")
 
-                AddView(barcode: $barcode, selection: $selection, navigateToProcessing: $navigateToProcessing, mealDescription: $mealDescription, imageData: $imageData)
+                AddView(barcode: $barcode, selection: $selection, navigateToProcessing: $navigateToProcessing, mealDescription: $mealDescription, imageData: $imageData, appIsOwned: $appIsOwned)
                     .tabItem {
                         Image(systemName: "plus.circle.fill")
                         Text("Add new")
@@ -95,10 +95,26 @@ struct MainTabView: View {
             )
             .hidden()
         }
-        /*
+        .onAppear {
+            let temporaryUserId = UserDefaults.standard.string(forKey: "userId")
+            
+            if(temporaryUserId == nil || temporaryUserId == "") {
+                // Create userId by making a POST request to 'https://api.jims.cx/create-user-id'
+                createUserAndFetchId { result in
+                    switch result {
+                    case .success(let userId):
+                        // Store userId in UserDefaults
+                        UserDefaults.standard.set(userId, forKey: "userId")
+                    case .failure(let error):
+                        print("Error")
+                        print(error)
+                    }
+                }
+            }
+        }
         .sheet(isPresented: $showWelcomeScreen) {
             WelcomeView(showWelcomeScreen: $showWelcomeScreen)
-        }*/
+        }
         .sheet(isPresented: $showPaywall) {
             PurchaseView(showPaywall: $showPaywall, appIsOwned: $appIsOwned)
         }
